@@ -41,7 +41,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -61,26 +69,77 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Service1.svc" />
-    <Content Include="Web.config" />
+    <Content Include="AuthService.svc" />
+    <Content Include="companiesService.svc" />
+    <Content Include="easy2m Model.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
+      <LastGenOutput>easy2m Model.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="easy2m Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
+      <LastGenOutput>easy2m Model.cs</LastGenOutput>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service1.svc.cs">
-      <DependentUpon>Service1.svc</DependentUpon>
+    <Compile Include="AuthService.svc.cs">
+      <DependentUpon>AuthService.svc</DependentUpon>
     </Compile>
-    <Compile Include="IService1.cs" />
+    <Compile Include="companiesService.svc.cs">
+      <DependentUpon>companiesService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="Company.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="easy2m Model.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>easy2m Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="easy2m Model.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="easy2m Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="IcompaniesService.cs" />
+    <Compile Include="linqDBHandler.cs" />
+    <Compile Include="DBHandler.cs" />
+    <Compile Include="IAuthService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="easy2m Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>easy2m Model.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="easy2m Model.edmx.diagram">
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
+    </Content>
+    <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
