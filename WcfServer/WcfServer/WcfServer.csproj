@@ -42,10 +42,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AuthService.svc" />
+    <Content Include="companiesService.svc" />
     <Content Include="easy2m Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>easy2m Model.edmx</DependentUpon>
@@ -87,6 +88,9 @@
   <ItemGroup>
     <Compile Include="AuthService.svc.cs">
       <DependentUpon>AuthService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="companiesService.svc.cs">
+      <DependentUpon>companiesService.svc</DependentUpon>
     </Compile>
     <Compile Include="Company.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
@@ -106,6 +110,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>easy2m Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="IcompaniesService.cs" />
     <Compile Include="linqDBHandler.cs" />
     <Compile Include="DBHandler.cs" />
     <Compile Include="IAuthService.cs" />
@@ -118,7 +123,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
     <EntityDeploy Include="easy2m Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>easy2m Model.Designer.cs</LastGenOutput>
@@ -126,6 +130,7 @@
     <Content Include="easy2m Model.edmx.diagram">
       <DependentUpon>easy2m Model.edmx</DependentUpon>
     </Content>
+    <Content Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -13,34 +13,17 @@ namespace WcfServer
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class AuthService : IAuthService
     {
+        DBHandler handler = new linqDBHandler();
+     
         public bool login(string userName, string password)
         {
-            Easy2MEntities ent = new Easy2MEntities();
-            
-            var L2EQuery = from u in ent.Users
-            where u.userName == userName && u.password == password
-            select u;
-
-            var user = L2EQuery.FirstOrDefault<User>();
-
-            return user != null;
+            return handler.auth(userName, password);
         }
 
-        public bool register(string userName, string password, string admin)
+        public bool register(string userName, string password, bool admin)
         {
-            bool ad;
-            bool.TryParse(admin, out ad);
-            User user = new User()
-            {
-                userName = userName,
-                password = password,
-                admin = ad
-            };
 
-            Easy2MEntities ent = new Easy2MEntities();
-            ent.Users.Add(user);
-            ent.SaveChanges();
-            return true;
+            return handler.register(userName, password,admin);
         }
     }
 }

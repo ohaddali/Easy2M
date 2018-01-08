@@ -11,15 +11,17 @@ namespace WcfServer
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Company
     {
+        [NotMapped]
         public long id { get; set; }
         public string name { get; set; }
         public long ownerID { get; set; }
         public string logoUrl { get; set; }
         public string description { get; set; }
     
-        public virtual User User1 { get; set; }
+        public virtual User owner { get; set; }
     }
 }

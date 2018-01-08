@@ -9,7 +9,19 @@ namespace WcfServer
     {
         private Easy2MEntities ent = new Easy2MEntities();
 
-      
+        private bool Save()
+        {
+            try
+            {
+                ent.SaveChanges();
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public bool auth(string username, string password)
         {
@@ -40,35 +52,31 @@ namespace WcfServer
         }
 
 
-        public bool addCompany(string companyName, long ownerID, string picUrl, string description)
+        public bool insertCompany(Company company)
         {
-            Company company = new Company()
-            {
-                name = companyName,
-                ownerID = ownerID,
-                logoUrl = picUrl,
-                description = description
-            };
             ent.Companies.Add(company);
-            return Save();
-           
+            return Save(); 
         }
 
 
-
-
-        private bool Save()
+        public bool updateCompany(Company updatedCompany)
         {
-            try
-            {
-                ent.SaveChanges();
-            }
-            catch
-            {
+            var res = from c in ent.Companies where c.name == "das" select c;
+            Company s = res.FirstOrDefault<Company>();
+            var company = ent.Companies.Find(updatedCompany.id);
+            if(company==null)
                 return false;
-            }
+            ent.Entry(company).CurrentValues.SetValues(updatedCompany);
+            return Save();
+        }
 
-            return true;
+        public bool deleteCompany(long id)
+        {
+            Company compToRemove = ent.Companies.Find(id);
+            if (compToRemove == null)
+                return false;
+            ent.Companies.Remove(compToRemove);
+            return Save();
         }
     }
 }
