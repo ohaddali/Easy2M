@@ -25,6 +25,7 @@ namespace WcfServer
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }
 }

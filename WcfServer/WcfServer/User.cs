@@ -14,8 +14,18 @@ namespace WcfServer
     
     public partial class User
     {
-        public string userName { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.Companies = new HashSet<Company>();
+        }
+    
+        public long id { get; set; }
+        public string username { get; set; }
         public string password { get; set; }
         public bool admin { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Company> Companies { get; set; }
     }
 }

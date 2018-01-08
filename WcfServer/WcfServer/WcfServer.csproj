@@ -70,41 +70,48 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AuthService.svc" />
-    <Content Include="Users Model.Context.tt">
+    <Content Include="easy2m Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Users Model.edmx</DependentUpon>
-      <LastGenOutput>Users Model.Context.cs</LastGenOutput>
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
+      <LastGenOutput>easy2m Model.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Users Model.tt">
+    <Content Include="easy2m Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Users Model.edmx</DependentUpon>
-      <LastGenOutput>Users Model.cs</LastGenOutput>
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
+      <LastGenOutput>easy2m Model.cs</LastGenOutput>
     </Content>
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthService.svc.cs">
       <DependentUpon>AuthService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Company.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="easy2m Model.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>easy2m Model.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="easy2m Model.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="easy2m Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="linqDBHandler.cs" />
+    <Compile Include="DBHandler.cs" />
     <Compile Include="IAuthService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs">
-      <DependentUpon>Users Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Users Model.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users Model.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Users Model.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Users Model.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Users Model.edmx</DependentUpon>
+      <DependentUpon>easy2m Model.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -112,12 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <EntityDeploy Include="Users Model.edmx">
+    <EntityDeploy Include="easy2m Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Users Model.Designer.cs</LastGenOutput>
+      <LastGenOutput>easy2m Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Users Model.edmx.diagram">
-      <DependentUpon>Users Model.edmx</DependentUpon>
+    <Content Include="easy2m Model.edmx.diagram">
+      <DependentUpon>easy2m Model.edmx</DependentUpon>
     </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
