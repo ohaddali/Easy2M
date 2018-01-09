@@ -25,7 +25,7 @@ namespace WcfServer
         bool deleteCompany(long id);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool addWorkerToCompany(long workerId , long comapnyId , long roleId);
 
     }
