@@ -27,5 +27,9 @@ namespace WcfServer
     
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Clock> Clocks { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Shift> Shifts { get; set; }
+        public virtual DbSet<workerCompany> workerCompanies { get; set; }
     }
 }

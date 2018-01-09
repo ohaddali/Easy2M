@@ -89,6 +89,9 @@
     <Compile Include="AuthService.svc.cs">
       <DependentUpon>AuthService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Clock.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="companiesService.svc.cs">
       <DependentUpon>companiesService.svc</DependentUpon>
     </Compile>
@@ -115,7 +118,16 @@
     <Compile Include="DBHandler.cs" />
     <Compile Include="IAuthService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Shift.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="workerCompany.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
     </Compile>
   </ItemGroup>

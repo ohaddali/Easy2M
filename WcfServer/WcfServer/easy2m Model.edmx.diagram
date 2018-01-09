@@ -8,6 +8,18 @@
         <EntityTypeShape EntityType="Easy2MModel.Company" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="Easy2MModel.User" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="Easy2MModel.FK_Companies_Users1" />
+        <EntityTypeShape EntityType="Easy2MModel.Clock" Width="1.5" PointX="9.75" PointY="1.375" />
+        <EntityTypeShape EntityType="Easy2MModel.Role" Width="1.5" PointX="5.25" PointY="1.125" />
+        <EntityTypeShape EntityType="Easy2MModel.Shift" Width="1.5" PointX="7.5" PointY="0.875" />
+        <EntityTypeShape EntityType="Easy2MModel.workerCompany" Width="1.5" PointX="7.5" PointY="4.5" />
+        <AssociationConnector Association="Easy2MModel.FK_Clock_Shifts" />
+        <AssociationConnector Association="Easy2MModel.FK_Clock_Users" />
+        <AssociationConnector Association="Easy2MModel.FK_Roles_Companies" />
+        <AssociationConnector Association="Easy2MModel.FK_Shifts_Companies" />
+        <AssociationConnector Association="Easy2MModel.FK_workerCompanies_Companies" />
+        <AssociationConnector Association="Easy2MModel.FK_Shifts_Roles" />
+        <AssociationConnector Association="Easy2MModel.FK_workerCompanies_Roles" />
+        <AssociationConnector Association="Easy2MModel.FK_workerCompanies_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

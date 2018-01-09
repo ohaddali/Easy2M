@@ -5,6 +5,16 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Easy2MModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Clock">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="workerId" Type="bigint" Nullable="false" />
+          <Property Name="shiftId" Type="bigint" Nullable="false" />
+          <Property Name="startTime" Type="datetime" Nullable="false" />
+          <Property Name="endTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="Companies">
           <Key>
             <PropertyRef Name="id" />
@@ -15,17 +25,77 @@
           <Property Name="logoUrl" Type="varchar" MaxLength="50" />
           <Property Name="description" Type="varchar(max)" />
         </EntityType>
-        <EntityType Name="Users">
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="roleId" />
+            <PropertyRef Name="companyId" />
+          </Key>
+          <Property Name="roleId" Type="bigint" Nullable="false" />
+          <Property Name="companyId" Type="bigint" Nullable="false" />
+          <Property Name="roleName" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Shifts">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="username" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="companyId" Type="bigint" Nullable="false" />
+          <Property Name="roleId" Type="bigint" Nullable="false" />
+          <Property Name="startTime" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="endTime" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="dayInTheWeek" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="admin" Type="bit" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="phoneNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="birthdate" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="workerCompanies">
+          <Key>
+            <PropertyRef Name="workerId" />
+            <PropertyRef Name="companyId" />
+          </Key>
+          <Property Name="workerId" Type="bigint" Nullable="false" />
+          <Property Name="companyId" Type="bigint" Nullable="false" />
+          <Property Name="roleId" Type="bigint" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Clock_Shifts">
+          <End Role="Shifts" Type="Self.Shifts" Multiplicity="1" />
+          <End Role="Clock" Type="Self.Clock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shifts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Clock">
+              <PropertyRef Name="shiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clock_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Clock" Type="Self.Clock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Clock">
+              <PropertyRef Name="workerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Companies_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Companies" Type="Self.Companies" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -36,12 +106,132 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Roles_Companies">
+          <End Role="Companies" Type="Self.Companies" Multiplicity="1" />
+          <End Role="Roles" Type="Self.Roles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Roles">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shifts_Companies">
+          <End Role="Companies" Type="Self.Companies" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Shifts" Type="Self.Shifts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Shifts">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shifts_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Shifts" Type="Self.Shifts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Principal>
+            <Dependent Role="Shifts">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_workerCompanies_Companies">
+          <End Role="Companies" Type="Self.Companies" Multiplicity="1" />
+          <End Role="workerCompanies" Type="Self.workerCompanies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="workerCompanies">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_workerCompanies_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="workerCompanies" Type="Self.workerCompanies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Principal>
+            <Dependent Role="workerCompanies">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_workerCompanies_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="workerCompanies" Type="Self.workerCompanies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="workerCompanies">
+              <PropertyRef Name="workerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="Easy2MModelStoreContainer">
+          <EntitySet Name="Clock" EntityType="Self.Clock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Companies" EntityType="Self.Companies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shifts" EntityType="Self.Shifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="workerCompanies" EntityType="Self.workerCompanies" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Clock_Shifts" Association="Self.FK_Clock_Shifts">
+            <End Role="Shifts" EntitySet="Shifts" />
+            <End Role="Clock" EntitySet="Clock" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clock_Users" Association="Self.FK_Clock_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Clock" EntitySet="Clock" />
+          </AssociationSet>
           <AssociationSet Name="FK_Companies_Users" Association="Self.FK_Companies_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Companies" EntitySet="Companies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Roles_Companies" Association="Self.FK_Roles_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="Roles" EntitySet="Roles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shifts_Companies" Association="Self.FK_Shifts_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="Shifts" EntitySet="Shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shifts_Roles" Association="Self.FK_Shifts_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Shifts" EntitySet="Shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_workerCompanies_Companies" Association="Self.FK_workerCompanies_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="workerCompanies" EntitySet="workerCompanies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_workerCompanies_Roles" Association="Self.FK_workerCompanies_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="workerCompanies" EntitySet="workerCompanies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_workerCompanies_Users" Association="Self.FK_workerCompanies_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="workerCompanies" EntitySet="workerCompanies" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -58,16 +248,21 @@
           <Property Name="logoUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="owner" Relationship="Easy2MModel.FK_Companies_Users1" FromRole="Company" ToRole="User" />
+          <NavigationProperty Name="Roles" Relationship="Easy2MModel.FK_Roles_Companies" FromRole="Company" ToRole="Role" />
+          <NavigationProperty Name="Shifts" Relationship="Easy2MModel.FK_Shifts_Companies" FromRole="Company" ToRole="Shift" />
         </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="username" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="admin" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Companies" Relationship="Easy2MModel.FK_Companies_Users1" FromRole="User" ToRole="Company" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="phoneNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="birthdate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="Easy2MEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Companies" EntityType="Self.Company" />
@@ -75,6 +270,42 @@
           <AssociationSet Name="FK_Companies_Users1" Association="Easy2MModel.FK_Companies_Users1">
             <End Role="User" EntitySet="Users" />
             <End Role="Company" EntitySet="Companies" />
+          </AssociationSet>
+          <EntitySet Name="Clocks" EntityType="Easy2MModel.Clock" />
+          <EntitySet Name="Roles" EntityType="Easy2MModel.Role" />
+          <EntitySet Name="Shifts" EntityType="Easy2MModel.Shift" />
+          <EntitySet Name="workerCompanies" EntityType="Easy2MModel.workerCompany" />
+          <AssociationSet Name="FK_Clock_Shifts" Association="Easy2MModel.FK_Clock_Shifts">
+            <End Role="Shift" EntitySet="Shifts" />
+            <End Role="Clock" EntitySet="Clocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Clock_Users" Association="Easy2MModel.FK_Clock_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Clock" EntitySet="Clocks" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Roles_Companies" Association="Easy2MModel.FK_Roles_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Role" EntitySet="Roles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shifts_Companies" Association="Easy2MModel.FK_Shifts_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Shift" EntitySet="Shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_workerCompanies_Companies" Association="Easy2MModel.FK_workerCompanies_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="workerCompany" EntitySet="workerCompanies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Shifts_Roles" Association="Easy2MModel.FK_Shifts_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Shift" EntitySet="Shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_workerCompanies_Roles" Association="Easy2MModel.FK_workerCompanies_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="workerCompany" EntitySet="workerCompanies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_workerCompanies_Users" Association="Easy2MModel.FK_workerCompanies_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="workerCompany" EntitySet="workerCompanies" />
           </AssociationSet>
         </EntityContainer>
         <Association Name="FK_Companies_Users1">
@@ -86,6 +317,156 @@
             </Principal>
             <Dependent Role="Company">
               <PropertyRef Name="ownerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Clock">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" />
+          <Property Name="workerId" Type="Int64" Nullable="false" />
+          <Property Name="shiftId" Type="Int64" Nullable="false" />
+          <Property Name="startTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="endTime" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Shift" Relationship="Easy2MModel.FK_Clock_Shifts" FromRole="Clock" ToRole="Shift" />
+          <NavigationProperty Name="User" Relationship="Easy2MModel.FK_Clock_Users" FromRole="Clock" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="roleId" />
+            <PropertyRef Name="companyId" />
+          </Key>
+          <Property Name="roleId" Type="Int64" Nullable="false" />
+          <Property Name="companyId" Type="Int64" Nullable="false" />
+          <Property Name="roleName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Company" Relationship="Easy2MModel.FK_Roles_Companies" FromRole="Role" ToRole="Company" />
+        </EntityType>
+        <EntityType Name="Shift">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="companyId" Type="Int64" Nullable="false" />
+          <Property Name="roleId" Type="Int64" Nullable="false" />
+          <Property Name="startTime" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="endTime" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="dayInTheWeek" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="Easy2MModel.FK_Shifts_Companies" FromRole="Shift" ToRole="Company" />
+          <NavigationProperty Name="Role" Relationship="Easy2MModel.FK_Shifts_Roles" FromRole="Shift" ToRole="Role" />
+        </EntityType>
+        <EntityType Name="workerCompany">
+          <Key>
+            <PropertyRef Name="workerId" />
+            <PropertyRef Name="companyId" />
+          </Key>
+          <Property Name="workerId" Type="Int64" Nullable="false" />
+          <Property Name="companyId" Type="Int64" Nullable="false" />
+          <Property Name="roleId" Type="Int64" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Clock_Shifts">
+          <End Type="Easy2MModel.Shift" Role="Shift" Multiplicity="1" />
+          <End Type="Easy2MModel.Clock" Role="Clock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shift">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Clock">
+              <PropertyRef Name="shiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Clock_Users">
+          <End Type="Easy2MModel.User" Role="User" Multiplicity="1" />
+          <End Type="Easy2MModel.Clock" Role="Clock" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Clock">
+              <PropertyRef Name="workerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Roles_Companies">
+          <End Type="Easy2MModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="Easy2MModel.Role" Role="Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Role">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shifts_Companies">
+          <End Type="Easy2MModel.Company" Role="Company" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Easy2MModel.Shift" Role="Shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Shift">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_workerCompanies_Companies">
+          <End Type="Easy2MModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="Easy2MModel.workerCompany" Role="workerCompany" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="workerCompany">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Shifts_Roles">
+          <End Type="Easy2MModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="Easy2MModel.Shift" Role="Shift" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Principal>
+            <Dependent Role="Shift">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_workerCompanies_Roles">
+          <End Type="Easy2MModel.Role" Role="Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Easy2MModel.workerCompany" Role="workerCompany" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Principal>
+            <Dependent Role="workerCompany">
+              <PropertyRef Name="roleId" />
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_workerCompanies_Users">
+          <End Type="Easy2MModel.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Easy2MModel.workerCompany" Role="workerCompany" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="workerCompany">
+              <PropertyRef Name="workerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -109,10 +490,54 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="Easy2MModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="birthdate" ColumnName="birthdate" />
+                <ScalarProperty Name="phoneNumber" ColumnName="phoneNumber" />
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="username" ColumnName="username" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="admin" ColumnName="admin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Clocks">
+            <EntityTypeMapping TypeName="Easy2MModel.Clock">
+              <MappingFragment StoreEntitySet="Clock">
+                <ScalarProperty Name="endTime" ColumnName="endTime" />
+                <ScalarProperty Name="startTime" ColumnName="startTime" />
+                <ScalarProperty Name="shiftId" ColumnName="shiftId" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Easy2MModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shifts">
+            <EntityTypeMapping TypeName="Easy2MModel.Shift">
+              <MappingFragment StoreEntitySet="Shifts">
+                <ScalarProperty Name="dayInTheWeek" ColumnName="dayInTheWeek" />
+                <ScalarProperty Name="endTime" ColumnName="endTime" />
+                <ScalarProperty Name="startTime" ColumnName="startTime" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="workerCompanies">
+            <EntityTypeMapping TypeName="Easy2MModel.workerCompany">
+              <MappingFragment StoreEntitySet="workerCompanies">
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
