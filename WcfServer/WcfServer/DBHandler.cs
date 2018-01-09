@@ -14,5 +14,8 @@ namespace WcfServer
         bool insertCompany(Company company);
         bool updateCompany(Company company);
 
+        long clockEnter(Clock clock);
+        bool clockExit(long entityId,DateTime endTime);
+        bool deleteCompany(long id);
     }
 }
