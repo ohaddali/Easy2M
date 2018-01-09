@@ -13,6 +13,8 @@ namespace WcfServer
 
         bool insertCompany(Company company);
         bool updateCompany(Company company);
+        bool addWorkerToCompany(long workerId, long companyId , long roleId);
+
 
         bool addShift(Shift newShift);
 
@@ -23,6 +25,11 @@ namespace WcfServer
         bool addRole(long compnayId, string roleName);
 
         bool deleteRole(long roleId);
+
+
+        long clockEnter(Clock clock);
+        bool clockExit(long entityId,DateTime endTime);
+        bool deleteCompany(long id);
 
     }
 }

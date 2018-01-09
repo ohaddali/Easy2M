@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AuthService.svc" />
+    <Content Include="ClockService.svc" />
     <Content Include="companiesService.svc" />
     <Content Include="easy2m Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -94,6 +95,9 @@
     <Compile Include="Clock.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="ClockService.svc.cs">
+      <DependentUpon>ClockService.svc</DependentUpon>
+    </Compile>
     <Compile Include="companiesService.svc.cs">
       <DependentUpon>companiesService.svc</DependentUpon>
     </Compile>
@@ -115,6 +119,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>easy2m Model.edmx</DependentUpon>
     </Compile>
+    <Compile Include="IClockService.cs" />
     <Compile Include="IcompaniesService.cs" />
     <Compile Include="IRoleService.cs" />
     <Compile Include="IShiftService.cs" />
