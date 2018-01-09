@@ -17,6 +17,16 @@ namespace WcfServer
             return handler.insertCompany(newCompany);
         }
 
+        public bool addWorkerToCompany(long workerId, long comapnyId, long roleId)
+        {
+            return handler.addWorkerToCompany(workerId, comapnyId , roleId);
+        }
+
+        public bool deleteCompany(long id)
+        {
+            return handler.deleteCompany(id);
+        }
+
         public bool updateCompany(Company updatedCompany)
         {
             return handler.updateCompany(updatedCompany);

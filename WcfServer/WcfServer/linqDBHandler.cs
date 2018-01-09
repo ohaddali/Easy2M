@@ -78,5 +78,39 @@ namespace WcfServer
             ent.Companies.Remove(compToRemove);
             return Save();
         }
+
+        public bool addWorkerToCompany(long workerId, long companyId , long roleId)
+        {
+            workerCompany wc = new workerCompany()
+            {
+                workerId = workerId,
+                companyId = companyId,
+                roleId = roleId
+            };
+
+            ent.workerCompanies.Add(wc);
+            return Save();
+        }
+
+        public long clockEnter(Clock clock)
+        {
+            Clock added = ent.Clocks.Add(clock);
+            if(Save())
+            {
+                return added.id;
+            }
+            return -1;
+        }
+
+        public bool clockExit(long entityId , DateTime endTime)
+        {
+            Clock clock = ent.Clocks.Find(entityId);
+            if (clock == null)
+                return false;
+            clock.endTime = endTime;
+            return Save();
+        }
+
+        
     }
 }
