@@ -14,5 +14,15 @@ namespace WcfServer
         bool insertCompany(Company company);
         bool updateCompany(Company company);
 
+        bool addShift(Shift newShift);
+
+        bool deleteShift(int shiftId);
+
+        bool updateShift(Shift updatedShift);
+
+        bool addRole(long compnayId, string roleName);
+
+        bool deleteRole(long roleId);
+
     }
 }

@@ -14,14 +14,13 @@ namespace WcfServer
     {
 
         [OperationContract]
-        [WebInvoke(Method = "POST" ,RequestFormat =WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json , BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool register(string userName, string password , bool admin);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "GET", UriTemplate = "login/{userName}/{password}", RequestFormat = WebMessageFormat.Json)]
         bool login(string userName , string password);
 
-        // TODO: Add your service operations here
     }
 
 }

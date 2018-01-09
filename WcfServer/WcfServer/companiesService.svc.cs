@@ -17,6 +17,11 @@ namespace WcfServer
             return handler.insertCompany(newCompany);
         }
 
+        public bool deleteCompany(long id)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool updateCompany(Company updatedCompany)
         {
             return handler.updateCompany(updatedCompany);
