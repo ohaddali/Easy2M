@@ -79,6 +79,19 @@ namespace WcfServer
             return Save();
         }
 
+        public bool addWorkerToCompany(long workerId, long companyId , long roleId)
+        {
+            workerCompany wc = new workerCompany()
+            {
+                workerId = workerId,
+                companyId = companyId,
+                roleId = roleId
+            };
+
+            ent.workerCompanies.Add(wc);
+            return Save();
+        }
+
         public long clockEnter(Clock clock)
         {
             Clock added = ent.Clocks.Add(clock);
@@ -97,5 +110,7 @@ namespace WcfServer
             clock.endTime = endTime;
             return Save();
         }
+
+        
     }
 }

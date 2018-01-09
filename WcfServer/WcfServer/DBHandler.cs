@@ -13,6 +13,7 @@ namespace WcfServer
 
         bool insertCompany(Company company);
         bool updateCompany(Company company);
+        bool addWorkerToCompany(long workerId, long companyId , long roleId);
 
         long clockEnter(Clock clock);
         bool clockExit(long entityId,DateTime endTime);
