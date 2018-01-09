@@ -61,8 +61,6 @@ namespace WcfServer
 
         public bool updateCompany(Company updatedCompany)
         {
-            var res = from c in ent.Companies where c.name == "das" select c;
-            Company s = res.FirstOrDefault<Company>();
             var company = ent.Companies.Find(updatedCompany.id);
             if(company==null)
                 return false;
@@ -76,6 +74,51 @@ namespace WcfServer
             if (compToRemove == null)
                 return false;
             ent.Companies.Remove(compToRemove);
+            return Save();
+        }
+
+        public bool addShift(Shift newShift)
+        {
+            ent.Shifts.Add(newShift);
+            return Save();
+        }
+
+        public bool deleteShift(int shiftId)
+        {
+            Shift shiftToRemove = ent.Shifts.Find(shiftId);
+            if (shiftToRemove == null)
+                return false;
+            ent.Shifts.Remove(shiftToRemove);
+            return Save();
+        }
+
+        public bool updateShift(Shift updatedShift)
+        {
+            var shift = ent.Shifts.Find(updatedShift.id);
+            if (shift == null)
+                return false;
+            ent.Entry(shift).CurrentValues.SetValues(updatedShift);
+            return Save();
+        }
+
+        public bool addRole(long compnayId, string roleName)
+        {
+            Role role = new Role()
+            {
+                companyId = compnayId,
+                roleName = roleName
+            };
+
+            ent.Roles.Add(role);
+            return Save();
+        }
+
+        public bool deleteRole(long roleId)
+        {
+            Role roleToRemove = ent.Roles.Find(roleId);
+            if (roleToRemove == null)
+                return false;
+            ent.Roles.Remove(roleToRemove);
             return Save();
         }
 
@@ -111,6 +154,5 @@ namespace WcfServer
             return Save();
         }
 
-        
     }
 }

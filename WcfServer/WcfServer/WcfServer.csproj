@@ -82,6 +82,8 @@
       <DependentUpon>easy2m Model.edmx</DependentUpon>
       <LastGenOutput>easy2m Model.cs</LastGenOutput>
     </Content>
+    <Content Include="RoleService.svc" />
+    <Content Include="ShiftService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -119,6 +121,8 @@
     </Compile>
     <Compile Include="IClockService.cs" />
     <Compile Include="IcompaniesService.cs" />
+    <Compile Include="IRoleService.cs" />
+    <Compile Include="IShiftService.cs" />
     <Compile Include="linqDBHandler.cs" />
     <Compile Include="DBHandler.cs" />
     <Compile Include="IAuthService.cs" />
@@ -126,8 +130,14 @@
     <Compile Include="Role.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="RoleService.svc.cs">
+      <DependentUpon>RoleService.svc</DependentUpon>
+    </Compile>
     <Compile Include="Shift.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShiftService.svc.cs">
+      <DependentUpon>ShiftService.svc</DependentUpon>
     </Compile>
     <Compile Include="User.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
