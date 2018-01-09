@@ -11,11 +11,16 @@ namespace WcfServer
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class Company
     {
-        [NotMapped]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Company()
+        {
+            this.Roles = new HashSet<Role>();
+            this.Shifts = new HashSet<Shift>();
+        }
+    
         public long id { get; set; }
         public string name { get; set; }
         public long ownerID { get; set; }
@@ -23,5 +28,9 @@ namespace WcfServer
         public string description { get; set; }
     
         public virtual User owner { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Role> Roles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Shift> Shifts { get; set; }
     }
 }

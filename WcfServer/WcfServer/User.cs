@@ -24,6 +24,9 @@ namespace WcfServer
         public string username { get; set; }
         public string password { get; set; }
         public bool admin { get; set; }
+        public string name { get; set; }
+        public string phoneNumber { get; set; }
+        public string birthdate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Company> Companies { get; set; }
