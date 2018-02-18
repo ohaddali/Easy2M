@@ -36,5 +36,10 @@ namespace WcfServer
         //ShiftsBoard Table
         bool setShift(ShiftsBoard shiftBoardEnt); //To man a shift with a new workre
         bool updateShift(ShiftsBoard shiftBoardEnt); //Update shift worker.
+
+        //ShiftsRequests Table
+
+        bool requestShift(ShiftRequest request);
+        bool cancelShiftRequest(ShiftRequest request);
     }
 }

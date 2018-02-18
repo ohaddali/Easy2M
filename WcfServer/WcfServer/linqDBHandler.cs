@@ -168,5 +168,24 @@ namespace WcfServer
             ent.Entry(shift).CurrentValues.SetValues(shiftBoardEnt);
             return Save();
         }
+
+        public bool requestShift(ShiftRequest request)
+        {
+            ent.ShiftRequests.Add(request);
+            return Save();
+        }
+
+        public bool cancelShiftRequest(ShiftRequest request)
+        {
+            // ShiftRequest shiftRequest = ent.ShiftRequests.Find(request.shiftId,request.week,request.year);
+            var shiftRequest = (from req in ent.ShiftRequests
+                                where req.shiftId == request.shiftId && req.week == request.week
+                                && req.year == request.year && req.workerId == request.workerId
+                                select req).FirstOrDefault();
+            if (shiftRequest == null)
+                return false;
+            ent.ShiftRequests.Remove(shiftRequest);
+            return Save();
+        }
     }
 }
