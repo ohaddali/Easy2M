@@ -28,5 +28,17 @@ namespace WcfServer
         {
             return handler.clockExit(enterId, Convert.ToDateTime(endTime));
         }
+
+
+        public bool update(long enterId, string startTime, string endTime)
+        {
+            Clock clock = handler.getClock(enterId);
+            if (startTime != null)
+                clock.startTime = Convert.ToDateTime(startTime);
+            if (endTime != null)
+                clock.endTime = Convert.ToDateTime(endTime);
+
+            return handler.updateClock(clock);
+        }
     }
 }

@@ -66,6 +66,7 @@
           <Property Name="week" Type="int" Nullable="false" />
           <Property Name="year" Type="int" Nullable="false" />
           <Property Name="workerId" Type="bigint" Nullable="false" />
+          <Property Name="wantReplace" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -588,6 +589,7 @@
           <Property Name="workerId" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Shift" Relationship="Easy2MModel.FK_ShiftsBoards_Shifts" FromRole="ShiftsBoard" ToRole="Shift" />
           <NavigationProperty Name="User" Relationship="Easy2MModel.FK_ShiftsBoards_Users" FromRole="ShiftsBoard" ToRole="User" />
+          <Property Name="wantReplace" Type="Boolean" Nullable="false" />
         </EntityType>
         <Association Name="FK_ShiftsBoards_Shifts">
           <End Type="Easy2MModel.Shift" Role="Shift" Multiplicity="1" />
@@ -725,6 +727,7 @@
           <EntitySetMapping Name="ShiftsBoards">
             <EntityTypeMapping TypeName="Easy2MModel.ShiftsBoard">
               <MappingFragment StoreEntitySet="ShiftsBoards">
+                <ScalarProperty Name="wantReplace" ColumnName="wantReplace" />
                 <ScalarProperty Name="workerId" ColumnName="workerId" />
                 <ScalarProperty Name="year" ColumnName="year" />
                 <ScalarProperty Name="week" ColumnName="week" />

@@ -154,6 +154,15 @@ namespace WcfServer
             return Save();
         }
 
+        public bool updateClock(Clock updatedClock)
+        {
+            var clock = ent.Clocks.Find(updatedClock.id);
+            if (clock == null)
+                return false;
+            ent.Entry(clock).CurrentValues.SetValues(updatedClock);
+            return Save();
+        }
+
         public bool setShift(ShiftsBoard shiftBoardEnt)
         {
             ent.ShiftsBoards.Add(shiftBoardEnt);
@@ -186,6 +195,11 @@ namespace WcfServer
                 return false;
             ent.ShiftRequests.Remove(shiftRequest);
             return Save();
+        }
+
+        public Clock getClock(long id)
+        {
+            return ent.Clocks.Find(id);
         }
     }
 }

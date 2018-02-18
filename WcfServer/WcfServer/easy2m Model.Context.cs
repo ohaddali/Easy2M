@@ -29,7 +29,7 @@ namespace WcfServer
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Clock> Clocks { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<Shift> Shifts { get; set; }
+        public virtual DbSet<ShiftBoard> Shifts { get; set; }
         public virtual DbSet<workerCompany> workerCompanies { get; set; }
         public virtual DbSet<ShiftsBoard> ShiftsBoards { get; set; }
         public virtual DbSet<ShiftRequest> ShiftRequests { get; set; }

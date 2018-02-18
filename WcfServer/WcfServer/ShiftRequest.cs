@@ -19,7 +19,7 @@ namespace WcfServer
         public int year { get; set; }
         public long workerId { get; set; }
     
-        public virtual Shift Shift { get; set; }
+        public virtual ShiftBoard Shift { get; set; }
         public virtual User User { get; set; }
     }
 }

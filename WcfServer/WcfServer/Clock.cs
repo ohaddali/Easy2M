@@ -20,7 +20,7 @@ namespace WcfServer
         public System.DateTime startTime { get; set; }
         public Nullable<System.DateTime> endTime { get; set; }
     
-        public virtual Shift Shift { get; set; }
+        public virtual ShiftBoard Shift { get; set; }
         public virtual User User { get; set; }
     }
 }

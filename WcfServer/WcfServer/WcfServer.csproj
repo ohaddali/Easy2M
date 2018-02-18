@@ -83,6 +83,7 @@
       <LastGenOutput>easy2m Model.cs</LastGenOutput>
     </Content>
     <Content Include="RoleService.svc" />
+    <Content Include="ShiftsBoardService.svc" />
     <Content Include="ShiftService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -122,6 +123,7 @@
     <Compile Include="IClockService.cs" />
     <Compile Include="IcompaniesService.cs" />
     <Compile Include="IRoleService.cs" />
+    <Compile Include="IShiftsBoardService.cs" />
     <Compile Include="IShiftService.cs" />
     <Compile Include="linqDBHandler.cs" />
     <Compile Include="DBHandler.cs" />
@@ -141,6 +143,9 @@
     </Compile>
     <Compile Include="ShiftsBoard.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShiftsBoardService.svc.cs">
+      <DependentUpon>ShiftsBoardService.svc</DependentUpon>
     </Compile>
     <Compile Include="ShiftService.svc.cs">
       <DependentUpon>ShiftService.svc</DependentUpon>
