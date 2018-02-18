@@ -94,7 +94,7 @@ namespace ReportsRole
 
                 Workbook workBook = builder.write(columns, rows);
                 workBook.SaveAs("temp.xlsx");
-                string url = blob.uploadFile("temp.xlsx", userId + "_" + weekDate + ".xlsx");
+                string url = await blob.uploadFileAsync("temp.xlsx", userId + "_" + weekDate + ".xlsx");
                 File.Delete("temp.xlsx");
 
                 WorkerReport workerReport = new WorkerReport();

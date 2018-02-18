@@ -37,20 +37,29 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ReportsRole\ReportsRole.csproj">
-      <Name>ReportsRole</Name>
+    <Folder Include="ScheduledReportsRoleContent\" />
+    <Folder Include="WorkerReportsRoleContent" />
+  </ItemGroup>
+  <ItemGroup>
+    <DiagnosticsConfiguration Include="ScheduledReportsRoleContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="WorkerReportsRoleContent\diagnostics.wadcfgx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ReportsRole\WorkerReportsRole.csproj">
+      <Name>WorkerReportsRole</Name>
       <Project>{3af3c6c8-c5b0-468a-83d6-271e864586b9}</Project>
       <Private>True</Private>
       <RoleType>Worker</RoleType>
-      <RoleName>ReportsRole</RoleName>
+      <RoleName>WorkerReportsRole</RoleName>
+    </ProjectReference>
+    <ProjectReference Include="..\ScheduledReportsRole\ScheduledReportsRole.csproj">
+      <Name>ScheduledReportsRole</Name>
+      <Project>{5be0162d-9cab-49d6-8004-fc2901980647}</Project>
+      <Private>True</Private>
+      <RoleType>Worker</RoleType>
+      <RoleName>ScheduledReportsRole</RoleName>
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ReportsRoleContent\" />
-  </ItemGroup>
-  <ItemGroup>
-    <DiagnosticsConfiguration Include="ReportsRoleContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

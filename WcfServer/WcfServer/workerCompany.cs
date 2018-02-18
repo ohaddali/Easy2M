@@ -17,5 +17,7 @@ namespace WcfServer
         public long workerId { get; set; }
         public long companyId { get; set; }
         public long roleId { get; set; }
+    
+        public virtual User Worker { get; set; }
     }
 }

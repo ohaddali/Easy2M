@@ -7,7 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WcfServer", "WcfServer\WcfS
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "EasyCloudService", "EasyCloudService\EasyCloudService.ccproj", "{6B2ED8A8-0CEC-41BC-8364-5F589857CD5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReportsRole", "ReportsRole\ReportsRole.csproj", "{3AF3C6C8-C5B0-468A-83D6-271E864586B9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerReportsRole", "ReportsRole\WorkerReportsRole.csproj", "{3AF3C6C8-C5B0-468A-83D6-271E864586B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduledReportsRole", "ScheduledReportsRole\ScheduledReportsRole.csproj", "{5BE0162D-9CAB-49D6-8004-FC2901980647}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{3AF3C6C8-C5B0-468A-83D6-271E864586B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AF3C6C8-C5B0-468A-83D6-271E864586B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AF3C6C8-C5B0-468A-83D6-271E864586B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BE0162D-9CAB-49D6-8004-FC2901980647}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BE0162D-9CAB-49D6-8004-FC2901980647}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BE0162D-9CAB-49D6-8004-FC2901980647}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BE0162D-9CAB-49D6-8004-FC2901980647}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
