@@ -250,5 +250,34 @@ namespace WcfServer
             ent.WorkerReports.Add(workerReport);
             return Save();
         }
+
+        public bool addReport(Report report)
+        {
+            ent.Reports.Add(report);
+            return Save();
+        }
+
+        public IEnumerable<Company> getAllCompanies()
+        {
+            return ent.Companies.AsEnumerable();
+        }
+
+        public IEnumerable<User> getAllCompanyWorkers(long companyId)
+        {
+            return (from worker in ent.workerCompanies where worker.companyId == companyId select worker.Worker);
+        }
+
+        public List<Clock> getClocksByMonth(long workerId, DateTime date)
+        {
+            var clocks = (from c in ent.Clocks
+                          where c.workerId == workerId
+                          && c.startTime.Month == date.Month
+                          && c.startTime.Year == date.Year
+                          select c);
+            if (clocks == null)
+                return null;
+
+            return clocks.ToList();
+        }
     }
 }

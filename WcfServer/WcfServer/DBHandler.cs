@@ -16,6 +16,7 @@ namespace WcfServer
         bool insertCompany(Company company);
         bool updateCompany(Company company);
         bool deleteCompany(long id);
+        
 
         //WorkerCompany Table - Admin Method
         bool addWorkerToCompany(long workerId, long companyId, long roleId);
@@ -25,6 +26,7 @@ namespace WcfServer
         bool deleteShift(int shiftId);
         bool updateShift(Shift updatedShift);
         List<Clock> getClocks(long workerId, DateTime date);
+        List<Clock> getClocksByMonth(long workerId, DateTime date);
 
         //Roles Table -- Admin Methods
         bool addRole(long compnayId, string roleName);
@@ -49,5 +51,10 @@ namespace WcfServer
         Report getReportByDate(long companyId, DateTime date);
         WorkerReport getWorkerReportByDate(long workerId, DateTime date);
         bool addWorkerReport(WorkerReport workerReport);
+        bool addReport(Report report);
+
+        IEnumerable<Company> getAllCompanies();
+        IEnumerable<User> getAllCompanyWorkers(long companyId);
+        
     }
 }

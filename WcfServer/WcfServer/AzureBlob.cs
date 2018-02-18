@@ -4,6 +4,7 @@ using Microsoft.WindowsAzure.Storage.Blob;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace WcfServer
@@ -28,12 +29,13 @@ namespace WcfServer
             container.CreateIfNotExists();
         }
 
-        public string uploadFile(string filePath , string fileName)
+        public async Task<string> uploadFileAsync(string filePath , string fileName)
         {
             CloudBlockBlob blockBlob = container.GetBlockBlobReference(fileName);
+
             using (var fileStream = System.IO.File.OpenRead(filePath))
             {
-                blockBlob.UploadFromStream(fileStream);
+                await blockBlob.UploadFromStreamAsync(fileStream);
             }
 
             var blobUrl = blockBlob.Uri.AbsoluteUri;
