@@ -11,7 +11,8 @@ namespace WcfServer
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.Globalization;
+
     public partial class ShiftsBoard
     {
         public long shiftId { get; set; }
@@ -20,7 +21,37 @@ namespace WcfServer
         public long workerId { get; set; }
         public bool wantReplace { get; set; }
     
-        public virtual ShiftBoard Shift { get; set; }
+        public virtual Shift Shift { get; set; }
         public virtual User User { get; set; }
+
+        public DateTime shiftDate()
+        {
+            int month = GetMonth(year, week);
+            int day = Shift.dayInTheWeek;
+            DateTime date = new DateTime(year , month , day);
+
+            return date;
+        }
+
+        static int GetMonth(int Year, int Week)
+        {
+            DateTime tDt = new DateTime(Year, 1, 1);
+
+            tDt.AddDays((Week - 1) * 7);
+
+            for (int i = 0; i <= 365; ++i)
+            {
+                int tWeek = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(
+                    tDt,
+                    CalendarWeekRule.FirstDay,
+                    DayOfWeek.Monday);
+                if (tWeek == Week)
+                    return tDt.Month;
+
+                tDt = tDt.AddDays(1);
+            }
+            return 0;
+        }
+
     }
 }

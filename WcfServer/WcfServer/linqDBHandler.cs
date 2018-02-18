@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -200,6 +201,54 @@ namespace WcfServer
         public Clock getClock(long id)
         {
             return ent.Clocks.Find(id);
+        }
+
+        public Report getReportByDate(long companyId, DateTime date)
+        {
+            var reports = from rep in ent.Reports
+                          where rep.companyId == companyId &&
+                          rep.date.Equals(date)
+                          select rep;
+
+            return reports.FirstOrDefault();
+        }
+
+        public WorkerReport getWorkerReportByDate(long workerId, DateTime date)
+        {
+            var reports = from rep in ent.WorkerReports
+                          where rep.workerId == workerId &&
+                          getWeekOfDate(rep.date) == getWeekOfDate(date) && rep.date.Year == date.Year
+                          select rep;
+
+            return reports.FirstOrDefault();
+        }
+
+        public List<Clock> getClocks(long workerId , DateTime date)
+        {
+            var clocks = (from c in ent.Clocks
+                        where c.workerId == workerId 
+                        && getWeekOfDate(c.startTime) == getWeekOfDate(date)
+                        && c.startTime.Year == date.Year
+                       select c);
+            if (clocks == null)
+                return null;
+
+            return clocks.ToList();
+        }
+
+        private int getWeekOfDate(DateTime date)
+        {
+            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+            Calendar cal = dfi.Calendar;
+            int week = cal.GetWeekOfYear(date, dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+
+            return week;
+        }
+
+        public bool addWorkerReport(WorkerReport workerReport)
+        {
+            ent.WorkerReports.Add(workerReport);
+            return Save();
         }
     }
 }

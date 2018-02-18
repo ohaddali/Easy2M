@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WcfServer
 {
-    interface DBHandler
+    public interface DBHandler
     {
         //Users Table
         bool register(string username, string password, bool admin);
@@ -24,6 +24,7 @@ namespace WcfServer
         bool addShift(Shift newShift);
         bool deleteShift(int shiftId);
         bool updateShift(Shift updatedShift);
+        List<Clock> getClocks(long workerId, DateTime date);
 
         //Roles Table -- Admin Methods
         bool addRole(long compnayId, string roleName);
@@ -42,5 +43,11 @@ namespace WcfServer
         //ShiftsRequests Table
         bool requestShift(ShiftRequest request);
         bool cancelShiftRequest(ShiftRequest request);
+
+        //Reports Table
+
+        Report getReportByDate(long companyId, DateTime date);
+        WorkerReport getWorkerReportByDate(long workerId, DateTime date);
+        bool addWorkerReport(WorkerReport workerReport);
     }
 }

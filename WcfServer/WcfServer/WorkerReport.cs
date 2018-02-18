@@ -12,14 +12,13 @@ namespace WcfServer
     using System;
     using System.Collections.Generic;
     
-    public partial class ShiftRequest
+    public partial class WorkerReport
     {
-        public long shiftId { get; set; }
-        public int week { get; set; }
-        public int year { get; set; }
+        public long reportId { get; set; }
         public long workerId { get; set; }
+        public System.DateTime date { get; set; }
+        public string url { get; set; }
     
-        public virtual Shift Shift { get; set; }
         public virtual User User { get; set; }
     }
 }
