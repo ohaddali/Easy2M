@@ -8,20 +8,20 @@ using System.Text;
 
 namespace WcfServer
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IClockService" in both code and config file together.
+    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IReportsService" in both code and config file together.
     [ServiceContract]
-    public interface IClockService
+    public interface IReportsService
     {
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        long enter(long workerId, long shiftId, string time); // (format dd/mm/yyyy hh:mm:ss)
+        string getReportUrlByDate(long companyId, DateTime date);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool exit(long enterId, string endTime);
+        string getWorkerReportUrlByDate(long userId, DateTime date);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool update(long enterId, string startTime, string endTime);
+        void exportWeeklyReportForWorker(long userId, DateTime date);
     }
 }

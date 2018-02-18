@@ -8,20 +8,26 @@ using System.Text;
 
 namespace WcfServer
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IClockService" in both code and config file together.
+    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IShiftsBoardService" in both code and config file together.
     [ServiceContract]
-    public interface IClockService
+    public interface IShiftsBoardService
     {
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        long enter(long workerId, long shiftId, string time); // (format dd/mm/yyyy hh:mm:ss)
+        bool setShift(long id, int week, int year, long workerId); //New Shift.
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool updateShift(long id, int week, int year, long workerId); // Modify Shift.
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool exit(long enterId, string endTime);
+        bool lookForReplace(ShiftsBoard shift);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool update(long enterId, string startTime, string endTime);
+        bool replace(ShiftsBoard shift , long workerId);
+
+
     }
+
 }
