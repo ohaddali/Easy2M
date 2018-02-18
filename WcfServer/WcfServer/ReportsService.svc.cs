@@ -13,20 +13,23 @@ namespace WcfServer
     {
         DBHandler handler = new linqDBHandler();
 
-        public void exportWeeklyReportForWorker(long userId , DateTime date)
+        public void exportWeeklyReportForWorker(long userId , string dateStr)
         {
+            DateTime date = Convert.ToDateTime(dateStr);
             AzureQueue queue = new AzureQueue();
             string message = userId + "," + date.ToString();
             queue.sendMessage(message);
         }
 
-        public string getReportUrlByDate(long companyId, DateTime date)
+        public string getReportUrlByDate(long companyId, string dateStr)
         {
+            DateTime date = Convert.ToDateTime(dateStr);
             return handler.getReportByDate(companyId, date).url;
         }
 
-        public string getWorkerReportUrlByDate(long userId, DateTime date)
+        public string getWorkerReportUrlByDate(long userId, string dateStr)
         {
+            DateTime date = Convert.ToDateTime(dateStr);
             return handler.getWorkerReportByDate(userId, date).url;
         }
     }

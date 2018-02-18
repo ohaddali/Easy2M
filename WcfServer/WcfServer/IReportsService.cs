@@ -14,14 +14,14 @@ namespace WcfServer
     {
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        string getReportUrlByDate(long companyId, DateTime date);
+        string getReportUrlByDate(long companyId, string date);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        string getWorkerReportUrlByDate(long userId, DateTime date);
+        string getWorkerReportUrlByDate(long userId, string date);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        void exportWeeklyReportForWorker(long userId, DateTime date);
+        void exportWeeklyReportForWorker(long userId, string date);
     }
 }
