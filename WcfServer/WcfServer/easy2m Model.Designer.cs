@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\ohadda\Source\Repos\Easy2M\WcfServer\WcfServer\easy2m Model.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\pc\Desktop\ohad\סמסטר ז\תכנון ופיתוח אפליקציות מבוססות ענן\Easy2M\WcfServer\WcfServer\easy2m Model.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

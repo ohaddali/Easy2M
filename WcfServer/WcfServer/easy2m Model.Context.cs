@@ -31,5 +31,7 @@ namespace WcfServer
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Shift> Shifts { get; set; }
         public virtual DbSet<workerCompany> workerCompanies { get; set; }
+        public virtual DbSet<ShiftsBoard> ShiftsBoards { get; set; }
+        public virtual DbSet<ShiftRequest> ShiftRequests { get; set; }
     }
 }

@@ -136,6 +136,12 @@
     <Compile Include="Shift.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="ShiftRequest.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShiftsBoard.cs">
+      <DependentUpon>easy2m Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="ShiftService.svc.cs">
       <DependentUpon>ShiftService.svc</DependentUpon>
     </Compile>

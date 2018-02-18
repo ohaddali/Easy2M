@@ -154,5 +154,19 @@ namespace WcfServer
             return Save();
         }
 
+        public bool setShift(ShiftsBoard shiftBoardEnt)
+        {
+            ent.ShiftsBoards.Add(shiftBoardEnt);
+            return Save();
+        }
+
+        public bool updateShift(ShiftsBoard shiftBoardEnt)
+        {
+            var shift = ent.Shifts.Find(shiftBoardEnt.shiftId,shiftBoardEnt.week,shiftBoardEnt.year);
+            if (shift == null)
+                return false;
+            ent.Entry(shift).CurrentValues.SetValues(shiftBoardEnt);
+            return Save();
+        }
     }
 }

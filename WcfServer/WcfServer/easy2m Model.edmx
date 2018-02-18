@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="bigint" Nullable="false" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="workerId" Type="bigint" Nullable="false" />
           <Property Name="shiftId" Type="bigint" Nullable="false" />
           <Property Name="startTime" Type="datetime" Nullable="false" />
@@ -28,11 +28,22 @@
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="roleId" />
-            <PropertyRef Name="companyId" />
           </Key>
-          <Property Name="roleId" Type="bigint" Nullable="false" />
+          <Property Name="roleId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="companyId" Type="bigint" Nullable="false" />
-          <Property Name="roleName" Type="nchar" MaxLength="10" />
+          <Property Name="roleName" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ShiftRequests">
+          <Key>
+            <PropertyRef Name="shiftId" />
+            <PropertyRef Name="week" />
+            <PropertyRef Name="year" />
+            <PropertyRef Name="workerId" />
+          </Key>
+          <Property Name="shiftId" Type="bigint" Nullable="false" />
+          <Property Name="week" Type="int" Nullable="false" />
+          <Property Name="year" Type="int" Nullable="false" />
+          <Property Name="workerId" Type="bigint" Nullable="false" />
         </EntityType>
         <EntityType Name="Shifts">
           <Key>
@@ -45,11 +56,22 @@
           <Property Name="endTime" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="dayInTheWeek" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="ShiftsBoards">
+          <Key>
+            <PropertyRef Name="shiftId" />
+            <PropertyRef Name="week" />
+            <PropertyRef Name="year" />
+          </Key>
+          <Property Name="shiftId" Type="bigint" Nullable="false" />
+          <Property Name="week" Type="int" Nullable="false" />
+          <Property Name="year" Type="int" Nullable="false" />
+          <Property Name="workerId" Type="bigint" Nullable="false" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="admin" Type="bit" Nullable="false" />
@@ -67,7 +89,9 @@
           <Property Name="roleId" Type="bigint" Nullable="false" />
         </EntityType>
         <Association Name="FK_Clock_Shifts">
-          <End Role="Shifts" Type="Self.Shifts" Multiplicity="1" />
+          <End Role="Shifts" Type="Self.Shifts" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Clock" Type="Self.Clock" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Shifts">
@@ -93,9 +117,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Companies_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Companies" Type="Self.Companies" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -115,6 +137,30 @@
             </Principal>
             <Dependent Role="Roles">
               <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShiftRequests_Shifts">
+          <End Role="Shifts" Type="Self.Shifts" Multiplicity="1" />
+          <End Role="ShiftRequests" Type="Self.ShiftRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shifts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftRequests">
+              <PropertyRef Name="shiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShiftRequests_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ShiftRequests" Type="Self.ShiftRequests" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftRequests">
+              <PropertyRef Name="workerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -140,16 +186,40 @@
           <ReferentialConstraint>
             <Principal Role="Roles">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
             </Principal>
             <Dependent Role="Shifts">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShiftsBoards_Shifts">
+          <End Role="Shifts" Type="Self.Shifts" Multiplicity="1" />
+          <End Role="ShiftsBoards" Type="Self.ShiftsBoards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shifts">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftsBoards">
+              <PropertyRef Name="shiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShiftsBoards_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="ShiftsBoards" Type="Self.ShiftsBoards" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftsBoards">
+              <PropertyRef Name="workerId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_workerCompanies_Companies">
-          <End Role="Companies" Type="Self.Companies" Multiplicity="1" />
+          <End Role="Companies" Type="Self.Companies" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="workerCompanies" Type="Self.workerCompanies" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Companies">
@@ -168,11 +238,9 @@
           <ReferentialConstraint>
             <Principal Role="Roles">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
             </Principal>
             <Dependent Role="workerCompanies">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -194,7 +262,9 @@
           <EntitySet Name="Clock" EntityType="Self.Clock" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Companies" EntityType="Self.Companies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShiftRequests" EntityType="Self.ShiftRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shifts" EntityType="Self.Shifts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShiftsBoards" EntityType="Self.ShiftsBoards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="workerCompanies" EntityType="Self.workerCompanies" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Clock_Shifts" Association="Self.FK_Clock_Shifts">
@@ -213,6 +283,14 @@
             <End Role="Companies" EntitySet="Companies" />
             <End Role="Roles" EntitySet="Roles" />
           </AssociationSet>
+          <AssociationSet Name="FK_ShiftRequests_Shifts" Association="Self.FK_ShiftRequests_Shifts">
+            <End Role="Shifts" EntitySet="Shifts" />
+            <End Role="ShiftRequests" EntitySet="ShiftRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShiftRequests_Users" Association="Self.FK_ShiftRequests_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ShiftRequests" EntitySet="ShiftRequests" />
+          </AssociationSet>
           <AssociationSet Name="FK_Shifts_Companies" Association="Self.FK_Shifts_Companies">
             <End Role="Companies" EntitySet="Companies" />
             <End Role="Shifts" EntitySet="Shifts" />
@@ -220,6 +298,14 @@
           <AssociationSet Name="FK_Shifts_Roles" Association="Self.FK_Shifts_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Shifts" EntitySet="Shifts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShiftsBoards_Shifts" Association="Self.FK_ShiftsBoards_Shifts">
+            <End Role="Shifts" EntitySet="Shifts" />
+            <End Role="ShiftsBoards" EntitySet="ShiftsBoards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShiftsBoards_Users" Association="Self.FK_ShiftsBoards_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="ShiftsBoards" EntitySet="ShiftsBoards" />
           </AssociationSet>
           <AssociationSet Name="FK_workerCompanies_Companies" Association="Self.FK_workerCompanies_Companies">
             <End Role="Companies" EntitySet="Companies" />
@@ -263,6 +349,8 @@
           <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="phoneNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="birthdate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ShiftRequests" Relationship="Easy2MModel.FK_ShiftRequests_Users" FromRole="User" ToRole="ShiftRequest" />
+          <NavigationProperty Name="ShitsBoards" Relationship="Easy2MModel.FK_ShiftsBoards_Users" FromRole="User" ToRole="ShiftsBoard" />
         </EntityType>
         <EntityContainer Name="Easy2MEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Companies" EntityType="Self.Company" />
@@ -307,6 +395,24 @@
             <End Role="User" EntitySet="Users" />
             <End Role="workerCompany" EntitySet="workerCompanies" />
           </AssociationSet>
+          <EntitySet Name="ShiftsBoards" EntityType="Easy2MModel.ShiftsBoard" />
+          <AssociationSet Name="FK_ShiftsBoards_Shifts" Association="Easy2MModel.FK_ShiftsBoards_Shifts">
+            <End Role="Shift" EntitySet="Shifts" />
+            <End Role="ShiftsBoard" EntitySet="ShiftsBoards" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShiftsBoards_Users" Association="Easy2MModel.FK_ShiftsBoards_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ShiftsBoard" EntitySet="ShiftsBoards" />
+          </AssociationSet>
+          <EntitySet Name="ShiftRequests" EntityType="Easy2MModel.ShiftRequest" />
+          <AssociationSet Name="FK_ShiftRequests_Shifts" Association="Easy2MModel.FK_ShiftRequests_Shifts">
+            <End Role="Shift" EntitySet="Shifts" />
+            <End Role="ShiftRequest" EntitySet="ShiftRequests" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ShiftRequests_Users" Association="Easy2MModel.FK_ShiftRequests_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="ShiftRequest" EntitySet="ShiftRequests" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_Companies_Users1">
           <End Type="Easy2MModel.User" Role="User" Multiplicity="1" />
@@ -339,7 +445,7 @@
           </Key>
           <Property Name="roleId" Type="Int64" Nullable="false" />
           <Property Name="companyId" Type="Int64" Nullable="false" />
-          <Property Name="roleName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="roleName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Company" Relationship="Easy2MModel.FK_Roles_Companies" FromRole="Role" ToRole="Company" />
         </EntityType>
         <EntityType Name="Shift">
@@ -470,6 +576,81 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="ShiftsBoard">
+          <Key>
+            <PropertyRef Name="shiftId" />
+            <PropertyRef Name="week" />
+            <PropertyRef Name="year" />
+          </Key>
+          <Property Name="shiftId" Type="Int64" Nullable="false" />
+          <Property Name="week" Type="Int32" Nullable="false" />
+          <Property Name="year" Type="Int32" Nullable="false" />
+          <Property Name="workerId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Shift" Relationship="Easy2MModel.FK_ShiftsBoards_Shifts" FromRole="ShiftsBoard" ToRole="Shift" />
+          <NavigationProperty Name="User" Relationship="Easy2MModel.FK_ShiftsBoards_Users" FromRole="ShiftsBoard" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_ShiftsBoards_Shifts">
+          <End Type="Easy2MModel.Shift" Role="Shift" Multiplicity="1" />
+          <End Type="Easy2MModel.ShiftsBoard" Role="ShiftsBoard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shift">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftsBoard">
+              <PropertyRef Name="shiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShiftsBoards_Users">
+          <End Type="Easy2MModel.User" Role="User" Multiplicity="1" />
+          <End Type="Easy2MModel.ShiftsBoard" Role="ShiftsBoard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftsBoard">
+              <PropertyRef Name="workerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ShiftRequest">
+          <Key>
+            <PropertyRef Name="shiftId" />
+            <PropertyRef Name="week" />
+            <PropertyRef Name="year" />
+            <PropertyRef Name="workerId" />
+          </Key>
+          <Property Name="shiftId" Type="Int64" Nullable="false" />
+          <Property Name="week" Type="Int32" Nullable="false" />
+          <Property Name="year" Type="Int32" Nullable="false" />
+          <Property Name="workerId" Type="Int64" Nullable="false" />
+          <NavigationProperty Name="Shift" Relationship="Easy2MModel.FK_ShiftRequests_Shifts" FromRole="ShiftRequest" ToRole="Shift" />
+          <NavigationProperty Name="User" Relationship="Easy2MModel.FK_ShiftRequests_Users" FromRole="ShiftRequest" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_ShiftRequests_Shifts">
+          <End Type="Easy2MModel.Shift" Role="Shift" Multiplicity="1" />
+          <End Type="Easy2MModel.ShiftRequest" Role="ShiftRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shift">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftRequest">
+              <PropertyRef Name="shiftId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ShiftRequests_Users">
+          <End Type="Easy2MModel.User" Role="User" Multiplicity="1" />
+          <End Type="Easy2MModel.ShiftRequest" Role="ShiftRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="ShiftRequest">
+              <PropertyRef Name="workerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -538,6 +719,26 @@
                 <ScalarProperty Name="roleId" ColumnName="roleId" />
                 <ScalarProperty Name="companyId" ColumnName="companyId" />
                 <ScalarProperty Name="workerId" ColumnName="workerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShiftsBoards">
+            <EntityTypeMapping TypeName="Easy2MModel.ShiftsBoard">
+              <MappingFragment StoreEntitySet="ShiftsBoards">
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="week" ColumnName="week" />
+                <ScalarProperty Name="shiftId" ColumnName="shiftId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShiftRequests">
+            <EntityTypeMapping TypeName="Easy2MModel.ShiftRequest">
+              <MappingFragment StoreEntitySet="ShiftRequests">
+                <ScalarProperty Name="workerId" ColumnName="workerId" />
+                <ScalarProperty Name="year" ColumnName="year" />
+                <ScalarProperty Name="week" ColumnName="week" />
+                <ScalarProperty Name="shiftId" ColumnName="shiftId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
