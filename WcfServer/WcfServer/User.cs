@@ -18,6 +18,9 @@ namespace WcfServer
         public User()
         {
             this.Companies = new HashSet<Company>();
+            this.ShiftRequests = new HashSet<ShiftRequest>();
+            this.ShitsBoards = new HashSet<ShiftsBoard>();
+            this.WorkerReports = new HashSet<WorkerReport>();
         }
     
         public long id { get; set; }
@@ -30,5 +33,11 @@ namespace WcfServer
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Company> Companies { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShiftRequest> ShiftRequests { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ShiftsBoard> ShitsBoards { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WorkerReport> WorkerReports { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -154,5 +155,100 @@ namespace WcfServer
             return Save();
         }
 
+        public bool updateClock(Clock updatedClock)
+        {
+            var clock = ent.Clocks.Find(updatedClock.id);
+            if (clock == null)
+                return false;
+            ent.Entry(clock).CurrentValues.SetValues(updatedClock);
+            return Save();
+        }
+
+        public bool setShift(ShiftsBoard shiftBoardEnt)
+        {
+            ent.ShiftsBoards.Add(shiftBoardEnt);
+            return Save();
+        }
+
+        public bool updateShift(ShiftsBoard shiftBoardEnt)
+        {
+            var shift = ent.Shifts.Find(shiftBoardEnt.shiftId,shiftBoardEnt.week,shiftBoardEnt.year);
+            if (shift == null)
+                return false;
+            ent.Entry(shift).CurrentValues.SetValues(shiftBoardEnt);
+            return Save();
+        }
+
+        public bool requestShift(ShiftRequest request)
+        {
+            ent.ShiftRequests.Add(request);
+            return Save();
+        }
+
+        public bool cancelShiftRequest(ShiftRequest request)
+        {
+            // ShiftRequest shiftRequest = ent.ShiftRequests.Find(request.shiftId,request.week,request.year);
+            var shiftRequest = (from req in ent.ShiftRequests
+                                where req.shiftId == request.shiftId && req.week == request.week
+                                && req.year == request.year && req.workerId == request.workerId
+                                select req).FirstOrDefault();
+            if (shiftRequest == null)
+                return false;
+            ent.ShiftRequests.Remove(shiftRequest);
+            return Save();
+        }
+
+        public Clock getClock(long id)
+        {
+            return ent.Clocks.Find(id);
+        }
+
+        public Report getReportByDate(long companyId, DateTime date)
+        {
+            var reports = from rep in ent.Reports
+                          where rep.companyId == companyId &&
+                          rep.date.Equals(date)
+                          select rep;
+
+            return reports.FirstOrDefault();
+        }
+
+        public WorkerReport getWorkerReportByDate(long workerId, DateTime date)
+        {
+            var reports = from rep in ent.WorkerReports
+                          where rep.workerId == workerId &&
+                          getWeekOfDate(rep.date) == getWeekOfDate(date) && rep.date.Year == date.Year
+                          select rep;
+
+            return reports.FirstOrDefault();
+        }
+
+        public List<Clock> getClocks(long workerId , DateTime date)
+        {
+            var clocks = (from c in ent.Clocks
+                        where c.workerId == workerId 
+                        && getWeekOfDate(c.startTime) == getWeekOfDate(date)
+                        && c.startTime.Year == date.Year
+                       select c);
+            if (clocks == null)
+                return null;
+
+            return clocks.ToList();
+        }
+
+        private int getWeekOfDate(DateTime date)
+        {
+            DateTimeFormatInfo dfi = DateTimeFormatInfo.CurrentInfo;
+            Calendar cal = dfi.Calendar;
+            int week = cal.GetWeekOfYear(date, dfi.CalendarWeekRule, dfi.FirstDayOfWeek);
+
+            return week;
+        }
+
+        public bool addWorkerReport(WorkerReport workerReport)
+        {
+            ent.WorkerReports.Add(workerReport);
+            return Save();
+        }
     }
 }
