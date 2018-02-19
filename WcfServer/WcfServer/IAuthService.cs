@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using WcfServer.ClientModels;
 
 namespace WcfServer
 {
@@ -12,6 +13,7 @@ namespace WcfServer
     [ServiceContract]
     public interface IAuthService
     {
+        
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json , BodyStyle = WebMessageBodyStyle.WrappedRequest)]
@@ -19,7 +21,7 @@ namespace WcfServer
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool login(string userName , string password);
+        UserClient login(string userName , string password);
 
     }
 

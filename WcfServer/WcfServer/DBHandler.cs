@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WcfServer.ClientModels;
 
 namespace WcfServer
 {
@@ -10,7 +11,7 @@ namespace WcfServer
     {
         //Users Table
         bool register(string username, string password, bool admin);
-        bool auth(string username, string password);
+        UserClient auth(string username, string password);
 
         //Companies Table -- Admin Methods
         bool insertCompany(Company company);

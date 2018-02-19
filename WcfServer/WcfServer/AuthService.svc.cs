@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-
+using WcfServer.ClientModels;
 
 namespace WcfServer
 {
@@ -15,14 +15,13 @@ namespace WcfServer
     {
         DBHandler handler = new linqDBHandler();
      
-        public bool login(string userName, string password)
-        {
+        public UserClient login(string userName, string password)
+        { 
             return handler.auth(userName, password);
         }
 
         public bool register(string userName, string password, bool admin)
         {
-
             return handler.register(userName, password,admin);
         }
     }
