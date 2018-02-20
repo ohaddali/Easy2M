@@ -506,7 +506,6 @@
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="roleId" />
-            <PropertyRef Name="companyId" />
           </Key>
           <Property Name="roleId" Type="Int64" Nullable="false" />
           <Property Name="companyId" Type="Int64" Nullable="false" />
@@ -604,11 +603,9 @@
           <ReferentialConstraint>
             <Principal Role="Role">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
             </Principal>
             <Dependent Role="Shift">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -620,11 +617,9 @@
           <ReferentialConstraint>
             <Principal Role="Role">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
             </Principal>
             <Dependent Role="workerCompany">
               <PropertyRef Name="roleId" />
-              <PropertyRef Name="companyId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>

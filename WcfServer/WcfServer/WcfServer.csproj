@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="AzureBlob.cs" />
     <Compile Include="AzureQueue.cs" />
+    <Compile Include="ClientModels\UserClient.cs" />
     <Compile Include="Clock.cs">
       <DependentUpon>easy2m Model.tt</DependentUpon>
     </Compile>

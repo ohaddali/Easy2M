@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using WcfServer.ClientModels;
 
 namespace WcfServer
 {
@@ -24,10 +25,27 @@ namespace WcfServer
             return true;
         }
 
-        public bool auth(string username, string password)
+        public UserClient auth(string username, string password)
         {
             var res = from user in ent.Users where user.username == username && user.password == password select user;
-            return res.FirstOrDefault<User>() != null;
+            User serverUser = res.FirstOrDefault<User>();
+            if (serverUser == null)
+            {
+                return new UserClient()
+                {
+                    loggedIn = false
+                };
+                
+            }
+            return new UserClient()
+            {
+                loggedIn = true,
+                username = serverUser.username,
+                name = serverUser.name,
+                phoneNumber = serverUser.phoneNumber,
+                admin = serverUser.admin
+            };
+            
         }
 
         public bool register(string username, string password, bool admin)
