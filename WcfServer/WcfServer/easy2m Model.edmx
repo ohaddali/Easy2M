@@ -534,6 +534,7 @@
           <Property Name="companyId" Type="Int64" Nullable="false" />
           <Property Name="roleId" Type="Int64" Nullable="false" />
           <NavigationProperty Name="Worker" Relationship="Easy2MModel.FK_workerCompanies_Users" FromRole="workerCompany" ToRole="User" />
+          <NavigationProperty Name="Company" Relationship="Easy2MModel.FK_workerCompanies_Companies" FromRole="workerCompany" ToRole="Company" />
         </EntityType>
         <Association Name="FK_Clock_Shifts">
           <End Type="Easy2MModel.Shift" Role="Shift" Multiplicity="1" />

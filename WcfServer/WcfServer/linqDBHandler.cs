@@ -300,5 +300,13 @@ namespace WcfServer
 
             return clocks.ToList();
         }
+
+        public List<Company> getAllworkerCompanies(long workerId)
+        {
+            var companies = from wc in ent.workerCompanies
+                            where wc.workerId == workerId
+                            select wc.Company;
+            return companies.ToList();
+        }
     }
 }
