@@ -10,7 +10,7 @@ namespace WcfServer
     public interface DBHandler
     {
         //Users Table
-        bool register(string username, string password, bool admin);
+        bool register(string userName, string password, string fullName, string birthdate, string phone, bool admin);
         UserClient auth(string username, string password);
 
         //Companies Table -- Admin Methods

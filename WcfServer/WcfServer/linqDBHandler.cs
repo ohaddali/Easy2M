@@ -48,13 +48,16 @@ namespace WcfServer
             
         }
 
-        public bool register(string username, string password, bool admin)
+        public bool register(string username, string password, string fullName, string birthdate, string phone, bool admin)
         {
             User user = new User()
             {
                 username = username,
                 password = password,
-                admin = admin
+                admin = admin,
+                name = fullName,
+                birthdate =birthdate,
+                phoneNumber= phone
             };
             ent.Users.Add(user);
 
