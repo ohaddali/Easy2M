@@ -27,6 +27,11 @@ namespace WcfServer
             return handler.deleteCompany(id);
         }
 
+        public Company[] getWorkerCompanies(long workerId)
+        {
+            return handler.getAllworkerCompanies(workerId);
+        }
+
         public bool updateCompany(Company updatedCompany)
         {
             return handler.updateCompany(updatedCompany);

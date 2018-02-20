@@ -28,6 +28,9 @@ namespace WcfServer
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool addWorkerToCompany(long workerId , long comapnyId , long roleId);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        Company[] getWorkerCompanies(long workerId);
     }
 
 }

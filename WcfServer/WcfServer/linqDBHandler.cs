@@ -40,6 +40,7 @@ namespace WcfServer
             return new UserClient()
             {
                 loggedIn = true,
+                id = serverUser.id,
                 username = serverUser.username,
                 name = serverUser.name,
                 phoneNumber = serverUser.phoneNumber,
@@ -48,13 +49,16 @@ namespace WcfServer
             
         }
 
-        public bool register(string username, string password, bool admin)
+        public bool register(string username, string password, string fullName, string birthdate, string phone, bool admin)
         {
             User user = new User()
             {
                 username = username,
                 password = password,
-                admin = admin
+                admin = admin,
+                name = fullName,
+                birthdate =birthdate,
+                phoneNumber= phone
             };
             ent.Users.Add(user);
 
@@ -296,6 +300,14 @@ namespace WcfServer
                 return null;
 
             return clocks.ToList();
+        }
+
+        public Company[] getAllworkerCompanies(long workerId)
+        {
+            var companies = from wc in ent.workerCompanies
+                            where wc.workerId == workerId
+                            select wc.Company;
+            return companies.ToArray();
         }
     }
 }
