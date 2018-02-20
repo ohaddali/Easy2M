@@ -32,7 +32,7 @@ namespace WcfServer
         //Roles Table -- Admin Methods
         bool addRole(long compnayId, string roleName);
         bool deleteRole(long roleId);
-        List<Company> getAllworkerCompanies(long workerId);
+        Company[] getAllworkerCompanies(long workerId);
 
         //Clock Table
         long clockEnter(Clock clock);

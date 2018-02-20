@@ -30,7 +30,7 @@ namespace WcfServer
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        List<Company> getWorkerCompanies(long workerId);
+        Company[] getWorkerCompanies(long workerId);
     }
 
 }
