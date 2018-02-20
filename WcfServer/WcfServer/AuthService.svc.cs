@@ -16,7 +16,7 @@ namespace WcfServer
         DBHandler handler = new linqDBHandler();
      
         public UserClient login(string userName, string password)
-        { 
+        {
             return handler.auth(userName, password);
         }
 
