@@ -8,6 +8,7 @@ namespace WcfServer.ClientModels
     public class UserClient
     {
         public bool loggedIn { get; set; }
+        public long id { get; set; }
         public string username { get; set; }
         public bool admin { get; set; }
         public string name { get; set; }

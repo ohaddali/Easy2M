@@ -40,6 +40,7 @@ namespace WcfServer
             return new UserClient()
             {
                 loggedIn = true,
+                id = serverUser.id,
                 username = serverUser.username,
                 name = serverUser.name,
                 phoneNumber = serverUser.phoneNumber,
