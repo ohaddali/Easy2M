@@ -70,10 +70,11 @@ namespace ReportsRole
             
             while (!cancellationToken.IsCancellationRequested)
             {
-                ExcelBuilder builder = new ExcelBuilder();
                 var message = await queue.deleteMessageAsync();
                 if (message == null)
                     continue;
+
+                ExcelBuilder builder = new ExcelBuilder();
                 string[] splitted = message.Split(',');
                 DateTime weekDate = DateTime.Parse(splitted[1]);
                 long userId;

@@ -36,15 +36,18 @@ namespace WcfServer
             queue.AddMessage(message);
         }
 
-        public String peekMessage()
+        public string peekMessage()
         {
             CloudQueueMessage peekedMessage = queue.PeekMessage();
             return peekedMessage.AsString;
         }
 
-        public String deleteMessage()
+        public string deleteMessage()
         {
             CloudQueueMessage retrievedMessage = queue.GetMessage();
+
+            if (retrievedMessage == null)
+                return null;
 
             queue.DeleteMessage(retrievedMessage);
 
@@ -54,6 +57,9 @@ namespace WcfServer
         public async Task<string> deleteMessageAsync()
         {
             CloudQueueMessage retrievedMessage = await queue.GetMessageAsync();
+
+            if (retrievedMessage == null)
+                return null;
 
             queue.DeleteMessage(retrievedMessage);
 
