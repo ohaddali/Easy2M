@@ -3,6 +3,7 @@ using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Queue;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,13 +18,13 @@ namespace WcfServer
         {
             // Retrieve storage account from connection string.
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
-                CloudConfigurationManager.GetSetting("StorageConnectionString"));
+                ConfigurationManager.ConnectionStrings["StorageConnectionString"].ConnectionString);
 
             // Create the queue client.
             CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
 
             // Retrieve a reference to a container.
-            queue = queueClient.GetQueueReference("reports queue");
+            queue = queueClient.GetQueueReference("reportsqueue");
 
             // Create the queue if it doesn't already exist
             queue.CreateIfNotExists();

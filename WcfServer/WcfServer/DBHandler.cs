@@ -10,11 +10,11 @@ namespace WcfServer
     public interface DBHandler
     {
         //Users Table
-        bool register(string userName, string password, string fullName, string birthdate, string phone, bool admin);
+        bool register(string userName, string password, string fullName, string birthdate, string phone, bool admin , string token);
         UserClient auth(string username, string password);
 
         //Companies Table -- Admin Methods
-        bool insertCompany(Company company);
+        Company insertCompany(Company company);
         bool updateCompany(Company company);
         bool deleteCompany(long id);
         
@@ -28,20 +28,24 @@ namespace WcfServer
         bool updateShift(Shift updatedShift);
         List<Clock> getClocks(long workerId, DateTime date);
         List<Clock> getClocksByMonth(long workerId, DateTime date);
+        Report[] getReportsOfAdmin(long companyId);
 
         //Roles Table -- Admin Methods
-        bool addRole(long compnayId, string roleName);
+        long addRole(long compnayId, string roleName);
         bool deleteRole(long roleId);
-        Company[] getAllworkerCompanies(long workerId);
+        CompanyClient[] getAllworkerCompanies(long workerId);
 
         //Clock Table
         long clockEnter(Clock clock);
+        WorkerReport[] getReportsOfWorker(long workerId);
         bool clockExit(long entityId,DateTime endTime);
         bool updateClock(Clock updatedClock);
         Clock getClock(long id); //Admin Method
+        User getUserByPhoneNumber(string userPhone);
 
         //ShiftsBoard Table -- Admin Methods
         bool setShift(ShiftsBoard shiftBoardEnt); //To man a shift with a new workre
+        string generateToken(long companyId, long roleId);
         bool updateShift(ShiftsBoard shiftBoardEnt); //Update shift worker.
 
         //ShiftsRequests Table
@@ -52,11 +56,14 @@ namespace WcfServer
 
         Report getReportByDate(long companyId, DateTime date);
         WorkerReport getWorkerReportByDate(long workerId, DateTime date);
+        Company getCompanyById(long companyId);
         bool addWorkerReport(WorkerReport workerReport);
         bool addReport(Report report);
 
         IEnumerable<Company> getAllCompanies();
         IEnumerable<User> getAllCompanyWorkers(long companyId);
-        
+
+
+        bool addWorkerToCompanyByToken(long workerId , string token);
     }
 }

@@ -12,20 +12,14 @@ namespace WcfServer
     using System;
     using System.Collections.Generic;
     
-    public partial class Role
+    public partial class Token
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Role()
-        {
-            this.Tokens = new HashSet<Token>();
-        }
-    
-        public long roleId { get; set; }
+        public long tokenId { get; set; }
         public long companyId { get; set; }
-        public string roleName { get; set; }
+        public long roleId { get; set; }
+        public bool valid { get; set; }
     
         public virtual Company Company { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Token> Tokens { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

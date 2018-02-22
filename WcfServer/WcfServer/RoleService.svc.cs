@@ -12,7 +12,7 @@ namespace WcfServer
     public class RoleService : IRoleService
     {
         DBHandler handler = new linqDBHandler();
-        public bool addRole(long compnayId, string roleName)
+        public long addRole(long compnayId, string roleName)
         {
             return handler.addRole(compnayId, roleName);
         }

@@ -16,8 +16,8 @@ namespace WcfServer
         
 
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json , BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool register(string username, string password , string fullname, string birthdate , string phone, bool admin);
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json , ResponseFormat = WebMessageFormat.Json , BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        bool register(string username, string password , string fullname, string birthdate , string phone, bool admin , string token);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]

@@ -35,5 +35,6 @@ namespace WcfServer
         public virtual DbSet<ShiftRequest> ShiftRequests { get; set; }
         public virtual DbSet<Report> Reports { get; set; }
         public virtual DbSet<WorkerReport> WorkerReports { get; set; }
+        public virtual DbSet<Token> Tokens { get; set; }
     }
 }

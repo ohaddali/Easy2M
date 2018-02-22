@@ -19,7 +19,7 @@ namespace WcfServer
             Hub = NotificationHubClient.CreateClientFromConnectionString(HubFullConnectionString, HubName);
         }
 
-        public async Task<bool> Notify(string message , List<int> usersId)
+        public async Task<bool> Notify(string message , List<long> usersId)
         {
             string tagExpression = "";
             for (int index = 0 ; index < usersId.Count; index++)

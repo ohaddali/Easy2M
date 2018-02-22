@@ -30,7 +30,10 @@
         <AssociationConnector Association="Easy2MModel.FK_Reports_Companies" />
         <EntityTypeShape EntityType="Easy2MModel.WorkerReport" Width="1.5" PointX="3" PointY="9.625" />
         <AssociationConnector Association="Easy2MModel.FK_WorkerReports_Users" />
-      </Diagram>
+        <EntityTypeShape EntityType="Easy2MModel.Token" Width="1.5" PointX="10.75" PointY="4.5" />
+        <AssociationConnector Association="Easy2MModel.FK_Tokens_Companies" />
+        <AssociationConnector Association="Easy2MModel.FK_Tokens_Roles" />
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

@@ -18,12 +18,12 @@ namespace ReportsRole
 
         }
 
-        public Workbook write(List<String> columns , List<List<String>> rows)
+        public Workbook write(Object value , List<String> columns , List<List<String>> rows)
         {
-            Workbook workbook = xlApp.Workbooks.Add(Missing.Value);
+            Workbook workbook = xlApp.Workbooks.Add(value);
             Worksheet workSheet = (Worksheet)workbook.Worksheets.get_Item(1);
-            int rowIndex = 0;
-            for(int column = 0 ; column < columns.Count; column++)
+            int rowIndex = 1;
+            for(int column = 1 ; column < columns.Count; column++)
             {
                 workSheet.Cells[rowIndex, column] = columns.ElementAt(column);
             }
@@ -32,13 +32,23 @@ namespace ReportsRole
 
             foreach(List<String> row in rows)
             {
-                for (int column = 0; column < row.Count; column++)
+                for (int column = 1; column < row.Count; column++)
                     workSheet.Cells[rowIndex, column] = row.ElementAt(column);
 
                 rowIndex++;
             }
             
             return workbook;
+        }
+
+        public void quit()
+        {
+            xlApp.Quit();
+        }
+
+        public Application getApp()
+        {
+            return xlApp;
         }
     }
 }

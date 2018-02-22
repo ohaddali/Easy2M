@@ -5,9 +5,9 @@
     <Setting Name="StorageConnectionString" Type="(Connection string)" Scope="Application">
       <DesignTimeValue Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;SerializableConnectionString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;ConnectionString&gt;UseDevelopmentStorage=true&lt;/ConnectionString&gt;
+  &lt;ConnectionString&gt;DefaultEndpointsProtocol=https;AccountName=nokstorage;AccountKey=xWzIHHH2J4jdbtJd9FfwatBsLhR4Zgx8/iWiiVGJ9pEGjLpkNxvb9Iqhld0WhaBN2Hat8sOcDOKnpc1bh74Zqw==;EndpointSuffix=core.windows.net&lt;/ConnectionString&gt;
 &lt;/SerializableConnectionString&gt;</DesignTimeValue>
-      <Value Profile="(Default)">UseDevelopmentStorage=true</Value>
+      <Value Profile="(Default)">DefaultEndpointsProtocol=https;AccountName=nokstorage;AccountKey=xWzIHHH2J4jdbtJd9FfwatBsLhR4Zgx8/iWiiVGJ9pEGjLpkNxvb9Iqhld0WhaBN2Hat8sOcDOKnpc1bh74Zqw==;EndpointSuffix=core.windows.net</Value>
     </Setting>
   </Settings>
 </SettingsFile>

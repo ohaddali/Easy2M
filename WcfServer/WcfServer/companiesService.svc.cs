@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using WcfServer.ClientModels;
 
 namespace WcfServer
 {
@@ -12,7 +13,7 @@ namespace WcfServer
     public class companiesService : IcompaniesService
     {
         DBHandler handler = new linqDBHandler();
-        public bool addCompany(Company newCompany)
+        public Company addCompany(Company newCompany)
         {
             return handler.insertCompany(newCompany);
         }
@@ -27,9 +28,41 @@ namespace WcfServer
             return handler.deleteCompany(id);
         }
 
-        public Company[] getWorkerCompanies(long workerId)
+        public CompanyClient[] getWorkerCompanies(long workerId)
         {
             return handler.getAllworkerCompanies(workerId);
+        }
+
+        public string NotifyWorkerToJoinCompany(string userPhone, long companyId, long roleId)
+        {
+            User user = handler.getUserByPhoneNumber(userPhone);
+            if (user != null)
+            {
+                addUserToRole(user, companyId, roleId);
+                return null;
+            }
+
+            string token = handler.generateToken(companyId, roleId);
+            string url = "http://easy2m.com/?token=" + token;
+            url = Bitly.getShortenedURL(url);
+
+            return url;
+        }
+
+        private async void addUserToRole(User user, long companyId, long roleId)
+        {
+          if(!user.Companies.Select(company => company.id).Contains(companyId))
+           {
+                List<long> usersId = new List<long>();
+                usersId.Add(user.id);
+                if (handler.addWorkerToCompany(user.id, companyId, roleId))
+                {
+                    Company c = handler.getCompanyById(companyId);
+                    if (c == null)
+                        return;
+                    await Notifications.Instance.Notify("Hey , You join to " +  c.name , usersId);
+                }
+           }
         }
 
         public bool updateCompany(Company updatedCompany)

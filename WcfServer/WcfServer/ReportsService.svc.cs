@@ -13,18 +13,68 @@ namespace WcfServer
     {
         DBHandler handler = new linqDBHandler();
 
-        public void exportWeeklyReportForWorker(long userId , string dateStr)
+        public bool exportWeeklyReportForWorker(long userId , string dateStr)
         {
             DateTime date = Convert.ToDateTime(dateStr);
             AzureQueue queue = new AzureQueue();
             string message = userId + "," + date.ToString();
             queue.sendMessage(message);
+
+            return true;
+        }
+
+        public ClientWorkerReport[] GetAdminReports(long companyId)
+        {
+            Report[] reports = handler.getReportsOfAdmin(companyId);
+
+            ClientWorkerReport[] clientReports = new ClientWorkerReport[reports.Length];
+
+            for (int index = 0; index < reports.Length; index++)
+            {
+                Report report = reports[index];
+                ClientWorkerReport clientReport = new ClientWorkerReport()
+                {
+                    reportId = report.reportId,
+                    relatedId = companyId,
+                    date = report.date.ToString(),
+                    workerReport = false
+                };
+
+                clientReports[index] = clientReport;
+
+            }
+
+            return clientReports;
         }
 
         public string getReportUrlByDate(long companyId, string dateStr)
         {
             DateTime date = Convert.ToDateTime(dateStr);
             return handler.getReportByDate(companyId, date).url;
+        }
+
+        public ClientWorkerReport[] GetWorkerReports(long workerId)
+        {
+            WorkerReport [] reports = handler.getReportsOfWorker(workerId);
+
+            ClientWorkerReport[] clientReports = new ClientWorkerReport[reports.Length];
+
+            for(int index = 0; index < reports.Length; index++)
+            {
+                WorkerReport report = reports[index];
+                ClientWorkerReport clientReport = new ClientWorkerReport()
+                {
+                    reportId = report.reportId,
+                    relatedId = workerId,
+                    date = report.date.ToString(),
+                    workerReport = true
+                };
+
+                clientReports[index] = clientReport;
+
+            }
+
+            return clientReports;
         }
 
         public string getWorkerReportUrlByDate(long userId, string dateStr)

@@ -17,7 +17,7 @@ namespace WcfServer
             {
                 ent.SaveChanges();
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }
@@ -44,12 +44,13 @@ namespace WcfServer
                 username = serverUser.username,
                 name = serverUser.name,
                 phoneNumber = serverUser.phoneNumber,
-                admin = serverUser.admin
+                admin = serverUser.admin,
+                birthdate = serverUser.birthdate
             };
             
         }
 
-        public bool register(string username, string password, string fullName, string birthdate, string phone, bool admin)
+        public bool register(string username, string password, string fullName, string birthdate, string phone, bool admin , string token)
         {
             User user = new User()
             {
@@ -60,7 +61,7 @@ namespace WcfServer
                 birthdate =birthdate,
                 phoneNumber= phone
             };
-            ent.Users.Add(user);
+            User newUser = ent.Users.Add(user);
 
             try
             {
@@ -71,14 +72,20 @@ namespace WcfServer
                 return false;
             }
             
+            if(token != null)
+                return addWorkerToCompanyByToken(newUser.id, token);
+
             return true;
         }
 
 
-        public bool insertCompany(Company company)
+        public Company insertCompany(Company company)
         {
-            ent.Companies.Add(company);
-            return Save(); 
+            Company newCompany = ent.Companies.Add(company);
+            if (Save())
+                return newCompany;
+
+            return new Company { id = -1 };
         }
 
 
@@ -124,7 +131,7 @@ namespace WcfServer
             return Save();
         }
 
-        public bool addRole(long compnayId, string roleName)
+        public long addRole(long compnayId, string roleName)
         {
             Role role = new Role()
             {
@@ -132,8 +139,26 @@ namespace WcfServer
                 roleName = roleName
             };
 
-            ent.Roles.Add(role);
-            return Save();
+            role = ent.Roles.Add(role);
+            if (Save())
+            {
+                Shift shift = new Shift()
+                {
+                    companyId = compnayId,
+                    roleId = role.roleId ,
+                    startTime = "00:00:00",
+                    endTime ="23:59:59",
+                    dayInTheWeek = 1
+                };
+
+                ent.Shifts.Add(shift);
+                if (Save())
+                    return role.roleId;
+                else
+                    return -1;
+            }
+
+            return -1;
         }
 
         public bool deleteRole(long roleId)
@@ -237,25 +262,45 @@ namespace WcfServer
 
         public WorkerReport getWorkerReportByDate(long workerId, DateTime date)
         {
-            var reports = from rep in ent.WorkerReports
+            /*var reports = from rep in ent.WorkerReports
                           where rep.workerId == workerId &&
                           getWeekOfDate(rep.date) == getWeekOfDate(date) && rep.date.Year == date.Year
-                          select rep;
+                          select rep;*/
 
-            return reports.FirstOrDefault();
+            var preReports = ent.WorkerReports.Where(rep => rep.date.Year == date.Year);
+            WorkerReport workerReport = null;
+            foreach(WorkerReport report in preReports)
+            {
+                if(getWeekOfDate(report.date) == getWeekOfDate(date))
+                {
+                    workerReport = report;
+                    break;
+                }
+            }
+
+            return workerReport;
         }
 
         public List<Clock> getClocks(long workerId , DateTime date)
         {
-            var clocks = (from c in ent.Clocks
+            /*var clocks = (from c in ent.Clocks
                         where c.workerId == workerId 
                         && getWeekOfDate(c.startTime) == getWeekOfDate(date)
                         && c.startTime.Year == date.Year
-                       select c);
+                       select c);*/
+
+            var preClocks = ent.Clocks.Where(c => c.workerId == workerId && c.startTime.Year == date.Year);
+            List<Clock> clocks = new List<Clock>();
+            foreach(Clock clock in preClocks)
+            {
+                if (getWeekOfDate(clock.startTime) == getWeekOfDate(date))
+                    clocks.Add(clock);
+            }
+
             if (clocks == null)
                 return null;
 
-            return clocks.ToList();
+            return clocks;
         }
 
         private int getWeekOfDate(DateTime date)
@@ -302,12 +347,101 @@ namespace WcfServer
             return clocks.ToList();
         }
 
-        public Company[] getAllworkerCompanies(long workerId)
+        public CompanyClient[] getAllworkerCompanies(long workerId)
         {
-            var companies = from wc in ent.workerCompanies
+            var user = (from u in ent.Users where u.id == workerId select u).FirstOrDefault();
+            Company[] companies;
+            if (user.admin)
+            {
+                companies = (from company in ent.Companies
+                             where company.ownerID == workerId
+                             select company).ToArray();
+            }
+            else
+            {
+                companies = (from wc in ent.workerCompanies
                             where wc.workerId == workerId
-                            select wc.Company;
-            return companies.ToArray();
+                            select wc.Company).ToArray();
+            }
+            CompanyClient[] comapinesClient = new CompanyClient[companies.Length];
+            for(int i = 0 ; i < companies.Length ; i++)
+            {
+                Company company = companies[i];
+                CompanyClient companyClient = new CompanyClient()
+                {
+                    id = company.id,
+                    name = company.name,
+                    ownerID = company.ownerID,
+                    logoUrl = company.logoUrl,
+                    description = company.description
+                };
+
+                comapinesClient[i] = companyClient;
+            }
+
+            return comapinesClient;
+        }
+
+        public User getUserByPhoneNumber(string userPhone)
+        {
+            return (from user in ent.Users where user.phoneNumber == userPhone select user).FirstOrDefault();
+        }
+
+        public string generateToken(long companyId, long roleId)
+        {
+            Token token = new Token()
+            {
+                companyId = companyId,
+                roleId = roleId,
+                valid = true
+            };
+
+            Token newToken = ent.Tokens.Add(token);
+            Save();
+
+            return newToken.tokenId + "";
+        }
+
+        public bool addWorkerToCompanyByToken(long workerId , string token)
+        {
+            long.TryParse(token, out long tokenId);
+            Token newToken = (from t in ent.Tokens
+                              where t.tokenId == tokenId
+                              select t).FirstOrDefault();
+            if (newToken == null)
+                return false;
+
+            if (!newToken.valid)
+                return false;
+
+            Token updateToken = new Token()
+            {
+                tokenId = newToken.tokenId,
+                companyId = newToken.companyId,
+                roleId = newToken.roleId,
+                valid = false
+            };
+
+            ent.Entry(newToken).CurrentValues.SetValues(updateToken);
+            if (!Save())
+                return false;
+
+            return addWorkerToCompany(workerId, newToken.companyId, newToken.roleId);
+        }
+
+        public Company getCompanyById(long companyId)
+        {
+            return (from c in ent.Companies where c.id == companyId select c).FirstOrDefault();
+        }
+
+        public WorkerReport[] getReportsOfWorker(long workerId)
+        {
+            return (from report in ent.WorkerReports where report.workerId == workerId select report).ToArray();
+        }
+
+        public Report[] getReportsOfAdmin(long companyId)
+        {
+            return (from report in ent.Reports where report.companyId == companyId select report).ToArray();
         }
     }
 }

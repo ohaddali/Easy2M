@@ -13,11 +13,11 @@ namespace WcfServer
     public interface IRoleService
     {
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool addRole(long compnayId , string roleName);
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json ,  BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        long addRole(long companyId , string roleName);
 
         [OperationContract]
-        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json)]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json , BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool deleteRole(long roleId);
     }
 }

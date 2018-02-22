@@ -4,12 +4,14 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="f720fb02-51f0-4768-97d9-ad3820ad1068" />
     </ConfigurationSettings>
   </Role>
   <Role name="ScheduledReportsRole">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=nokservice;AccountKey=$(_nokservice.key_)" />
+      <Setting name="APPINSIGHTS_INSTRUMENTATIONKEY" value="f720fb02-51f0-4768-97d9-ad3820ad1068" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

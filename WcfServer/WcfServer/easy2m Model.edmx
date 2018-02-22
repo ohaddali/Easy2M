@@ -77,6 +77,15 @@
           <Property Name="workerId" Type="bigint" Nullable="false" />
           <Property Name="wantReplace" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="Tokens">
+          <Key>
+            <PropertyRef Name="tokenId" />
+          </Key>
+          <Property Name="tokenId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="companyId" Type="bigint" Nullable="false" />
+          <Property Name="roleId" Type="bigint" Nullable="false" />
+          <Property Name="valid" Type="bit" Nullable="false" />
+        </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="id" />
@@ -102,7 +111,7 @@
           <Key>
             <PropertyRef Name="reportId" />
           </Key>
-          <Property Name="reportId" Type="bigint" Nullable="false" />
+          <Property Name="reportId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="workerId" Type="bigint" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
           <Property Name="url" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -247,6 +256,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Tokens_Companies">
+          <End Role="Companies" Type="Self.Companies" Multiplicity="1" />
+          <End Role="Tokens" Type="Self.Tokens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companies">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Tokens">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tokens_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Tokens" Type="Self.Tokens" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="Tokens">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_workerCompanies_Companies">
           <End Role="Companies" Type="Self.Companies" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -309,6 +342,7 @@
           <EntitySet Name="ShiftRequests" EntityType="Self.ShiftRequests" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Shifts" EntityType="Self.Shifts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShiftsBoards" EntityType="Self.ShiftsBoards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Tokens" EntityType="Self.Tokens" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="workerCompanies" EntityType="Self.workerCompanies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="WorkerReports" EntityType="Self.WorkerReports" Schema="dbo" store:Type="Tables" />
@@ -356,6 +390,14 @@
             <End Role="Users" EntitySet="Users" />
             <End Role="ShiftsBoards" EntitySet="ShiftsBoards" />
           </AssociationSet>
+          <AssociationSet Name="FK_Tokens_Companies" Association="Self.FK_Tokens_Companies">
+            <End Role="Companies" EntitySet="Companies" />
+            <End Role="Tokens" EntitySet="Tokens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tokens_Roles" Association="Self.FK_Tokens_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Tokens" EntitySet="Tokens" />
+          </AssociationSet>
           <AssociationSet Name="FK_workerCompanies_Companies" Association="Self.FK_workerCompanies_Companies">
             <End Role="Companies" EntitySet="Companies" />
             <End Role="workerCompanies" EntitySet="workerCompanies" />
@@ -390,6 +432,7 @@
           <NavigationProperty Name="Roles" Relationship="Easy2MModel.FK_Roles_Companies" FromRole="Company" ToRole="Role" />
           <NavigationProperty Name="Shifts" Relationship="Easy2MModel.FK_Shifts_Companies" FromRole="Company" ToRole="Shift" />
           <NavigationProperty Name="Reports" Relationship="Easy2MModel.FK_Reports_Companies" FromRole="Company" ToRole="Report" />
+          <NavigationProperty Name="Tokens" Relationship="Easy2MModel.FK_Tokens_Companies" FromRole="Company" ToRole="Token" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -478,7 +521,16 @@
             <End Role="User" EntitySet="Users" />
             <End Role="WorkerReport" EntitySet="WorkerReports" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="Tokens" EntityType="Easy2MModel.Token" />
+          <AssociationSet Name="FK_Tokens_Companies" Association="Easy2MModel.FK_Tokens_Companies">
+            <End Role="Company" EntitySet="Companies" />
+            <End Role="Token" EntitySet="Tokens" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Tokens_Roles" Association="Easy2MModel.FK_Tokens_Roles">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Token" EntitySet="Tokens" />
+          </AssociationSet>
+          </EntityContainer>
         <Association Name="FK_Companies_Users1">
           <End Type="Easy2MModel.User" Role="User" Multiplicity="1" />
           <End Type="Easy2MModel.Company" Role="Company" Multiplicity="*" />
@@ -511,6 +563,7 @@
           <Property Name="companyId" Type="Int64" Nullable="false" />
           <Property Name="roleName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Company" Relationship="Easy2MModel.FK_Roles_Companies" FromRole="Role" ToRole="Company" />
+          <NavigationProperty Name="Tokens" Relationship="Easy2MModel.FK_Tokens_Roles" FromRole="Role" ToRole="Token" />
         </EntityType>
         <EntityType Name="Shift">
           <Key>
@@ -758,7 +811,42 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="Token">
+          <Key>
+            <PropertyRef Name="tokenId" />
+          </Key>
+          <Property Name="tokenId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="companyId" Type="Int64" Nullable="false" />
+          <Property Name="roleId" Type="Int64" Nullable="false" />
+          <Property Name="valid" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Company" Relationship="Easy2MModel.FK_Tokens_Companies" FromRole="Token" ToRole="Company" />
+          <NavigationProperty Name="Role" Relationship="Easy2MModel.FK_Tokens_Roles" FromRole="Token" ToRole="Role" />
+        </EntityType>
+        <Association Name="FK_Tokens_Companies">
+          <End Type="Easy2MModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="Easy2MModel.Token" Role="Token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Company">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Token">
+              <PropertyRef Name="companyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Tokens_Roles">
+          <End Type="Easy2MModel.Role" Role="Role" Multiplicity="1" />
+          <End Type="Easy2MModel.Token" Role="Token" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="Token">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -867,6 +955,16 @@
                 <ScalarProperty Name="date" ColumnName="date" />
                 <ScalarProperty Name="workerId" ColumnName="workerId" />
                 <ScalarProperty Name="reportId" ColumnName="reportId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tokens">
+            <EntityTypeMapping TypeName="Easy2MModel.Token">
+              <MappingFragment StoreEntitySet="Tokens">
+                <ScalarProperty Name="valid" ColumnName="valid" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="companyId" ColumnName="companyId" />
+                <ScalarProperty Name="tokenId" ColumnName="tokenId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

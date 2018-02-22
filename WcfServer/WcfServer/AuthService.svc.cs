@@ -20,9 +20,9 @@ namespace WcfServer
             return handler.auth(userName, password);
         }
 
-        public bool register(string username, string password,string fullName , string birthdate, string phone, bool admin)
+        public bool register(string username, string password,string fullName , string birthdate, string phone, bool admin , string token)
         {
-            return handler.register(username, password, fullName, birthdate, phone, admin);
+            return handler.register(username, password, fullName, birthdate, phone, admin , token);
         }
     }
 }

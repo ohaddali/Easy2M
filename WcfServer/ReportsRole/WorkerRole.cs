@@ -12,6 +12,7 @@ using Microsoft.WindowsAzure.Storage;
 using WcfServer;
 using Microsoft.Office.Interop.Excel;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace ReportsRole
 {
@@ -65,12 +66,14 @@ namespace ReportsRole
         {
             AzureQueue queue = new AzureQueue();
             DBHandler db = new linqDBHandler();
-            ExcelBuilder builder = new ExcelBuilder();
             AzureBlob blob = new AzureBlob();
             
             while (!cancellationToken.IsCancellationRequested)
             {
+                ExcelBuilder builder = new ExcelBuilder();
                 var message = await queue.deleteMessageAsync();
+                if (message == null)
+                    continue;
                 string[] splitted = message.Split(',');
                 DateTime weekDate = DateTime.Parse(splitted[1]);
                 long userId;
@@ -92,19 +95,32 @@ namespace ReportsRole
                     rows.Add(row);
                 }
 
-                Workbook workBook = builder.write(columns, rows);
+                object misValue = System.Reflection.Missing.Value;
+                Workbook workBook = builder.write(misValue,columns, rows);
                 workBook.SaveAs("temp.xlsx");
-                string url = await blob.uploadFileAsync("temp.xlsx", userId + "_" + weekDate + ".xlsx");
-                File.Delete("temp.xlsx");
+
+                workBook.Close(true, misValue, misValue);
+                builder.quit();
+
+                Marshal.ReleaseComObject(workBook);
+                Marshal.ReleaseComObject(builder.getApp());
+
+                string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string fileName = userId + "_" + weekDate.Ticks + ".xlsx";
+                string url = await blob.uploadFileAsync(path+"/temp.xlsx", fileName);
+                File.Delete(path+"/temp.xlsx");
 
                 WorkerReport workerReport = new WorkerReport();
                 workerReport.workerId = userId;
-                workerReport.url = url;
+                workerReport.url = fileName;
                 workerReport.date = weekDate;
 
                 db.addWorkerReport(workerReport);
 
-                Trace.TraceInformation("new report : " + url);
+                List<long> usersId = new List<long>();
+                usersId.Add(userId);
+                await Notifications.Instance.Notify("Report for date : " + weekDate.ToString() + " is available", usersId);
+
             }
         }
     }

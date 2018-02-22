@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using WcfServer;
@@ -22,12 +23,11 @@ namespace ScheduledReportsRole
         private async Task weeklyReport()
         {
             DBHandler db = new linqDBHandler();
-            ExcelBuilder builder = new ExcelBuilder();
             AzureBlob blob = new AzureBlob();
-            // TODO: Replace the following with your own logic.
 
             foreach (Company c in db.getAllCompanies())
             {
+                ExcelBuilder builder = new ExcelBuilder();
                 List<string> columns = new List<string>();
                 columns.Add("userName");
                 columns.Add("Start Time");
@@ -54,16 +54,25 @@ namespace ScheduledReportsRole
                     }
                 }
 
-
-                Workbook workBook = builder.write(columns, rows);
+                object misValue = System.Reflection.Missing.Value;
+                Workbook workBook = builder.write(misValue,columns, rows);
                 workBook.SaveAs("temp.xlsx");
-                string url = await blob.uploadFileAsync("temp.xlsx", c.id + "_" + weekDate + ".xlsx");
-                File.Delete("temp.xlsx");
+
+                workBook.Close(true, misValue, misValue);
+                builder.quit();
+
+                Marshal.ReleaseComObject(workBook);
+                Marshal.ReleaseComObject(builder.getApp());
+
+                string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                string fileName = c.id + "_" + weekDate.Ticks + ".xlsx";
+                string url = await blob.uploadFileAsync(path+"/temp.xlsx", fileName);
+                File.Delete(path+"/temp.xlsx");
 
                 Report report = new Report();
                 report.companyId = c.id;
                 report.date = weekDate;
-                report.url = url;
+                report.url = fileName;
 
                 db.addReport(report);
 
