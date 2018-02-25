@@ -443,5 +443,21 @@ namespace WcfServer
         {
             return (from report in ent.Reports where report.companyId == companyId select report).ToArray();
         }
+
+        public long getDefaultShiftId(long roleId, int dayInTheWeek)
+        {
+            var shifts = from shift in ent.Shifts
+                         where shift.roleId == roleId && shift.dayInTheWeek == dayInTheWeek
+                         select shift;
+            return shifts.FirstOrDefault().id;
+
+        }
+
+        public long getRoleOfWorker(long workerId, long companyId)
+        {
+            return (from workerCompany in ent.workerCompanies
+                    where workerCompany.workerId == workerId && workerCompany.companyId == companyId
+                    select workerCompany).FirstOrDefault().roleId;
+        }
     }
 }

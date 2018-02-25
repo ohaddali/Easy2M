@@ -29,11 +29,13 @@ namespace WcfServer
         List<Clock> getClocks(long workerId, DateTime date);
         List<Clock> getClocksByMonth(long workerId, DateTime date);
         Report[] getReportsOfAdmin(long companyId);
+        long getDefaultShiftId(long roleId, int dayInTheWeek);
 
         //Roles Table -- Admin Methods
         long addRole(long compnayId, string roleName);
         bool deleteRole(long roleId);
         CompanyClient[] getAllworkerCompanies(long workerId);
+        long getRoleOfWorker(long workerId, long companyId);
 
         //Clock Table
         long clockEnter(Clock clock);

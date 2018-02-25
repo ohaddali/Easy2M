@@ -17,6 +17,10 @@ namespace WcfServer
         long enter(long workerId, long shiftId, string time); // (format dd/mm/yyyy hh:mm:ss)
 
         [OperationContract]
+        [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
+        long enterByWorker(long workerId, long comapnyId, string time); // (format dd/mm/yyyy hh:mm:ss)
+
+        [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json , BodyStyle = WebMessageBodyStyle.WrappedRequest)]
         bool exit(long enterId, string endTime);
 

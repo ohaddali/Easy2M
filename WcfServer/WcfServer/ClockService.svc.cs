@@ -40,5 +40,21 @@ namespace WcfServer
 
             return handler.updateClock(clock);
         }
+
+        public long enterByWorker(long workerId, long companyId, string time)
+        {
+            DateTime startTime = Convert.ToDateTime(time);
+            int dayInTheWeek = (int)startTime.DayOfWeek + 1;
+            long roleId = handler.getRoleOfWorker(workerId, companyId);
+            long shiftId = handler.getDefaultShiftId(roleId, dayInTheWeek);
+            Clock entrance = new Clock()
+            {
+                workerId = workerId,
+                shiftId = shiftId,
+                startTime = startTime
+
+            };
+            return handler.clockEnter(entrance);
+        }
     }
 }
