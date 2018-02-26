@@ -3,52 +3,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
 using System.Reflection;
+using OfficeOpenXml;
+using System.IO;
 
 namespace ReportsRole
 {
     public class ExcelBuilder
     {
-        private Application xlApp;
 
-        public ExcelBuilder()
+        public FileInfo write(List<String> columns , List<List<String>> rows)
         {
-            xlApp = new Microsoft.Office.Interop.Excel.Application();
-
-        }
-
-        public Workbook write(Object value , List<String> columns , List<List<String>> rows)
-        {
-            Workbook workbook = xlApp.Workbooks.Add(value);
-            Worksheet workSheet = (Worksheet)workbook.Worksheets.get_Item(1);
-            int rowIndex = 1;
-            for(int column = 1 ; column < columns.Count; column++)
+            FileInfo file = new FileInfo("temp.xlsx");
+            
+            using (var package = new ExcelPackage(file))
             {
-                workSheet.Cells[rowIndex, column] = columns.ElementAt(column);
-            }
-
-            rowIndex++;
-
-            foreach(List<String> row in rows)
-            {
-                for (int column = 1; column < row.Count; column++)
-                    workSheet.Cells[rowIndex, column] = row.ElementAt(column);
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("First Sheet");
+                int rowIndex = 1;
+                for (int column = 1; column <= columns.Count; column++)
+                {
+                    worksheet.Cells[rowIndex, column].Value = columns.ElementAt(column - 1);
+                }
 
                 rowIndex++;
+
+                foreach (List<String> row in rows)
+                {
+                    for (int column = 1; column <= row.Count; column++)
+                        worksheet.Cells[rowIndex, column].Value = row.ElementAt(column - 1);
+
+                    rowIndex++;
+                }
+
+                package.Save();
+
             }
             
-            return workbook;
-        }
-
-        public void quit()
-        {
-            xlApp.Quit();
-        }
-
-        public Application getApp()
-        {
-            return xlApp;
+            return file;
         }
     }
 }

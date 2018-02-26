@@ -16,9 +16,11 @@ namespace WcfServer
     {
         public long reportId { get; set; }
         public long workerId { get; set; }
+        public long companyId { get; set; }
         public System.DateTime date { get; set; }
         public string url { get; set; }
     
+        public virtual Company Company { get; set; }
         public virtual User User { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace WcfServer
             this.Shifts = new HashSet<Shift>();
             this.Reports = new HashSet<Report>();
             this.Tokens = new HashSet<Token>();
+            this.WorkerReports = new HashSet<WorkerReport>();
         }
     
         public long id { get; set; }
@@ -38,5 +39,7 @@ namespace WcfServer
         public virtual ICollection<Report> Reports { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Token> Tokens { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<WorkerReport> WorkerReports { get; set; }
     }
 }

@@ -33,24 +33,15 @@ namespace ScheduledReportsRole
                 columns.Add("Start Time");
                 columns.Add("End Time");
                 List<List<string>> rows = new List<List<string>>();
-                DateTime monthDate = new DateTime();
+                DateTime monthDate = DateTime.Now;
+                monthDate = monthDate.AddMonths(-1);
                 TimeZoneInfo israelTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
                 monthDate = TimeZoneInfo.ConvertTime(monthDate, israelTimeZone);
-
-                int year = monthDate.Year;
-                int month = monthDate.Month - 1;
-                if (month == 0)
-                {
-                    month = 12;
-                    year -= 1;
-                }
-
-                monthDate = new DateTime(year, month, 1);
 
                 foreach (User u in db.getAllCompanyWorkers(c.id))
                 {
                     long userId = u.id;
-                    List<Clock> clocks = db.getClocks(userId, monthDate);
+                    List<Clock> clocks = db.getClocksOfComapny(userId, monthDate , c.id);
 
                     foreach (Clock shift in clocks)
                     {
@@ -63,21 +54,11 @@ namespace ScheduledReportsRole
                     }
                 }
 
-                object misValue = System.Reflection.Missing.Value;
-                Workbook workBook = builder.write(misValue,columns, rows);
-                workBook.SaveAs("temp.xlsx");
+                FileInfo workBook = builder.write(columns, rows);
 
-                workBook.Close(true, misValue, misValue);
-                builder.quit();
-
-                Marshal.ReleaseComObject(workBook);
-                Marshal.ReleaseComObject(builder.getApp());
-
-                string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 string fileName = c.id + "_" + monthDate.Ticks + ".xlsx";
-
-                string url = await blob.uploadFileAsync(path+"/temp.xlsx", fileName);
-                File.Delete(path+"/temp.xlsx");
+                string url = await blob.uploadFileAsync(workBook.Name, fileName);
+                workBook.Delete();
 
                 Report report = new Report();
                 report.companyId = c.id;

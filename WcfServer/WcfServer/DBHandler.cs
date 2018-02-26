@@ -40,6 +40,7 @@ namespace WcfServer
         //Clock Table
         long clockEnter(Clock clock);
         WorkerReport[] getReportsOfWorker(long workerId);
+        List<Clock> getClocksOfComapny(long workerId, DateTime date, long companyId);
         bool clockExit(long entityId,DateTime endTime);
         bool updateClock(Clock updatedClock);
         Clock getClock(long id); //Admin Method
@@ -52,6 +53,7 @@ namespace WcfServer
 
         //ShiftsRequests Table
         bool requestShift(ShiftRequest request);
+        WorkerReport[] getReportsOfWorker(long workerId, long companyId);
         bool cancelShiftRequest(ShiftRequest request);
 
         //Reports Table

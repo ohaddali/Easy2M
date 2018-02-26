@@ -87,7 +87,7 @@ namespace ScheduledReportsRole
             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
 
             var weeklyJob = new JobDetailImpl("WeeklyJob", null, typeof(WeeklyJob));
-            var weeklyCronScheduleBuilder = CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Sunday, 0, 0)
+            var weeklyCronScheduleBuilder = CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Sunday, 22, 11)
                                                           .InTimeZone(timeZoneInfo);
             var weeklyTrigger = TriggerBuilder.Create()
                                         .StartNow()

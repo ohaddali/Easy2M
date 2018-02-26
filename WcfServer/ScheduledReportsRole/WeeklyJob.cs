@@ -34,14 +34,15 @@ namespace ScheduledReportsRole
                 columns.Add("End Time");
                 List<List<string>> rows = new List<List<string>>();
 
-                DateTime weekDate = new DateTime();
+                DateTime weekDate = DateTime.Now;
+                //weekDate = weekDate.AddDays(-7);
                 TimeZoneInfo israelTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Israel Standard Time");
                 weekDate = TimeZoneInfo.ConvertTime(weekDate, israelTimeZone);
 
                 foreach (User u in db.getAllCompanyWorkers(c.id))
                 {
                     long userId = u.id;
-                    List<Clock> clocks = db.getClocks(userId, weekDate);
+                    List<Clock> clocks = db.getClocksOfComapny(userId, weekDate , c.id);
 
                     foreach (Clock shift in clocks)
                     {
@@ -54,20 +55,11 @@ namespace ScheduledReportsRole
                     }
                 }
 
-                object misValue = System.Reflection.Missing.Value;
-                Workbook workBook = builder.write(misValue,columns, rows);
-                workBook.SaveAs("temp.xlsx");
+                FileInfo workBook = builder.write(columns, rows);
 
-                workBook.Close(true, misValue, misValue);
-                builder.quit();
-
-                Marshal.ReleaseComObject(workBook);
-                Marshal.ReleaseComObject(builder.getApp());
-
-                string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 string fileName = c.id + "_" + weekDate.Ticks + ".xlsx";
-                string url = await blob.uploadFileAsync(path+"/temp.xlsx", fileName);
-                File.Delete(path+"/temp.xlsx");
+                string url = await blob.uploadFileAsync(workBook.Name, fileName);
+                workBook.Delete();
 
                 Report report = new Report();
                 report.companyId = c.id;

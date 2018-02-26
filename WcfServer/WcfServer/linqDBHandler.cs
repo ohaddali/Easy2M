@@ -436,7 +436,8 @@ namespace WcfServer
 
         public WorkerReport[] getReportsOfWorker(long workerId)
         {
-            return (from report in ent.WorkerReports where report.workerId == workerId select report).ToArray();
+            return (from report in ent.WorkerReports where report.workerId == workerId group report by report.url into newGroup
+                    select newGroup.FirstOrDefault()).ToArray();
         }
 
         public Report[] getReportsOfAdmin(long companyId)
@@ -458,6 +459,30 @@ namespace WcfServer
             return (from workerCompany in ent.workerCompanies
                     where workerCompany.workerId == workerId && workerCompany.companyId == companyId
                     select workerCompany).FirstOrDefault().roleId;
+        }
+
+        public List<Clock> getClocksOfComapny(long workerId, DateTime date, long companyId)
+        {
+            var preClocks = ent.Clocks.Where(c => c.workerId == workerId && c.startTime.Year == date.Year && c.Shift.companyId == companyId);
+            List<Clock> clocks = new List<Clock>();
+            foreach (Clock clock in preClocks)
+            {
+                if (getWeekOfDate(clock.startTime) == getWeekOfDate(date))
+                    clocks.Add(clock);
+            }
+
+            if (clocks == null)
+                return null;
+
+            return clocks;
+        }
+
+        public WorkerReport[] getReportsOfWorker(long workerId, long companyId)
+        {
+            return (from report in ent.WorkerReports
+                    where report.workerId == workerId && report.companyId == companyId
+                    group report by report.url into newGroup
+                    select newGroup.FirstOrDefault()).ToArray();
         }
     }
 }

@@ -10,9 +10,10 @@ using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.Storage;
 using WcfServer;
-using Microsoft.Office.Interop.Excel;
 using System.IO;
 using System.Runtime.InteropServices;
+using ExcelLibrary.SpreadSheet;
+using System.Globalization;
 
 namespace ReportsRole
 {
@@ -74,12 +75,14 @@ namespace ReportsRole
                 if (message == null)
                     continue;
 
+                CultureInfo culture = CultureInfo.CreateSpecificCulture("fr-FR");
                 ExcelBuilder builder = new ExcelBuilder();
                 string[] splitted = message.Split(',');
-                DateTime weekDate = DateTime.Parse(splitted[1]);
-                long userId;
+                DateTime weekDate = DateTime.Parse(splitted[2] , culture);
+                long userId , companyId;
                 long.TryParse(splitted[0], out userId);
-                List<Clock> clocks = db.getClocks(userId, weekDate);
+                long.TryParse(splitted[1], out companyId);
+                List<Clock> clocks = db.getClocksOfComapny(userId, weekDate , companyId);
                 List<string> columns = new List<string>();
                 columns.Add("Company");
                 columns.Add("Start Time");
@@ -96,25 +99,17 @@ namespace ReportsRole
                     rows.Add(row);
                 }
 
-                object misValue = System.Reflection.Missing.Value;
-                Workbook workBook = builder.write(misValue,columns, rows);
-                workBook.SaveAs("temp.xlsx");
+                FileInfo workBook = builder.write(columns, rows);
 
-                workBook.Close(true, misValue, misValue);
-                builder.quit();
-
-                Marshal.ReleaseComObject(workBook);
-                Marshal.ReleaseComObject(builder.getApp());
-
-                string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                string fileName = userId + "_" + weekDate.Ticks + ".xlsx";
-                string url = await blob.uploadFileAsync(path+"/temp.xlsx", fileName);
-                File.Delete(path+"/temp.xlsx");
+                string fileName = userId + "_" + companyId +"_" + weekDate.Ticks + ".xlsx";
+                string url = await blob.uploadFileAsync(workBook.Name, fileName);
+                workBook.Delete();
 
                 WorkerReport workerReport = new WorkerReport();
                 workerReport.workerId = userId;
                 workerReport.url = fileName;
                 workerReport.date = weekDate;
+                workerReport.companyId = companyId;
 
                 db.addWorkerReport(workerReport);
 

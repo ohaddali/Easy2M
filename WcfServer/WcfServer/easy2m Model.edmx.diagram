@@ -28,11 +28,12 @@
         <AssociationConnector Association="Easy2MModel.FK_ShiftRequests_Users" />
         <EntityTypeShape EntityType="Easy2MModel.Report" Width="1.5" PointX="2.25" PointY="6.25" />
         <AssociationConnector Association="Easy2MModel.FK_Reports_Companies" />
-        <EntityTypeShape EntityType="Easy2MModel.WorkerReport" Width="1.5" PointX="3" PointY="9.625" />
-        <AssociationConnector Association="Easy2MModel.FK_WorkerReports_Users" />
         <EntityTypeShape EntityType="Easy2MModel.Token" Width="1.5" PointX="10.75" PointY="4.5" />
         <AssociationConnector Association="Easy2MModel.FK_Tokens_Companies" />
         <AssociationConnector Association="Easy2MModel.FK_Tokens_Roles" />
+        <EntityTypeShape EntityType="Easy2MModel.WorkerReport" Width="1.5" PointX="6.5" PointY="7.875" />
+        <AssociationConnector Association="Easy2MModel.FK_WorkerReports_Companies" />
+        <AssociationConnector Association="Easy2MModel.FK_WorkerReports_Users" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -12,18 +13,18 @@ namespace WcfServer
     public class ReportsService : IReportsService
     {
         DBHandler handler = new linqDBHandler();
-
-        public bool exportWeeklyReportForWorker(long userId , string dateStr)
+        CultureInfo culture = CultureInfo.CreateSpecificCulture("fr-FR");
+        public bool exportWeeklyReportForWorker(long userId , long companyId , string dateStr)
         {
-            DateTime date = Convert.ToDateTime(dateStr);
+            DateTime date = Convert.ToDateTime(dateStr , culture);
             AzureQueue queue = new AzureQueue();
-            string message = userId + "," + date.ToString();
+            string message = userId + "," + companyId + "," + date.ToString(culture);
             queue.sendMessage(message);
 
             return true;
         }
 
-        public ClientWorkerReport[] GetAdminReports(long companyId)
+        public ClientWorkerReport[] getAdminReports(long companyId)
         {
             Report[] reports = handler.getReportsOfAdmin(companyId);
 
@@ -36,6 +37,7 @@ namespace WcfServer
                 {
                     reportId = report.reportId,
                     relatedId = companyId,
+                    url = report.url,
                     date = report.date.ToString(),
                     workerReport = false
                 };
@@ -49,13 +51,13 @@ namespace WcfServer
 
         public string getReportUrlByDate(long companyId, string dateStr)
         {
-            DateTime date = Convert.ToDateTime(dateStr);
+            DateTime date = Convert.ToDateTime(dateStr , culture);
             return handler.getReportByDate(companyId, date).url;
         }
 
-        public ClientWorkerReport[] GetWorkerReports(long workerId)
+        public ClientWorkerReport[] getWorkerReports(long workerId , long companyId)
         {
-            WorkerReport [] reports = handler.getReportsOfWorker(workerId);
+            WorkerReport [] reports = handler.getReportsOfWorker(workerId , companyId);
 
             ClientWorkerReport[] clientReports = new ClientWorkerReport[reports.Length];
 
@@ -66,6 +68,7 @@ namespace WcfServer
                 {
                     reportId = report.reportId,
                     relatedId = workerId,
+                    url = report.url,
                     date = report.date.ToString(),
                     workerReport = true
                 };
@@ -79,7 +82,7 @@ namespace WcfServer
 
         public string getWorkerReportUrlByDate(long userId, string dateStr)
         {
-            DateTime date = Convert.ToDateTime(dateStr);
+            DateTime date = Convert.ToDateTime(dateStr , culture);
             return handler.getWorkerReportByDate(userId, date).url;
         }
     }

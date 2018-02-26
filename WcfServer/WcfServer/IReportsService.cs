@@ -22,14 +22,14 @@ namespace WcfServer
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json , BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        bool exportWeeklyReportForWorker(long userId, string date);
+        bool exportWeeklyReportForWorker(long userId, long companyId , string date);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        ClientWorkerReport[] GetWorkerReports(long workerId);
+        ClientWorkerReport[] getWorkerReports(long workerId, long companyId);
 
         [OperationContract]
         [WebInvoke(Method = "POST", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedRequest)]
-        ClientWorkerReport[] GetAdminReports(long companyId);
+        ClientWorkerReport[] getAdminReports(long companyId);
     }
 }

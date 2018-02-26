@@ -219,6 +219,10 @@
       <DependentUpon>easy2m Model.edmx</DependentUpon>
     </Content>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\WcfServer20180225110753 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\WcfServer20180225114146 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\WcfServer20180225114404 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\WcfServer20180226012936 - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
